@@ -1,0 +1,82 @@
+body {
+  padding-top: 80px;
+  background: url('../img/login_bg.JPG')no-repeat center center fixed; 
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+}
+
+body.signup{padding-top: 0;}
+
+.form-signin {
+  max-width: 450px;
+  padding: 15px;
+  margin: 0 auto;
+}
+
+.form-signin .form-control {
+  position: relative;
+  height: auto;
+  -webkit-box-sizing: border-box;
+     -moz-box-sizing: border-box;
+          box-sizing: border-box;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.form-signin .form-control:focus {
+  border-color: #00ADBB;
+  outline: 0;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(0, 173, 187, 0.6);
+          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(0, 173, 187, 0.6);
+}
+
+.form-signin .form-control:focus {z-index: 2;}
+
+.form-signin input {
+  margin-bottom: 10px;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 20px;
+}
+
+#signup-password{margin-bottom:10px;}
+
+.btn-primary {
+  color: #fff;
+  background-color: #00ADBB;
+  border-color: #00ADBB;
+}
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active,
+.btn-primary.active,
+.open .dropdown-toggle.btn-primary {
+  color: #fff;
+  background-color: #0095a2;
+  border-color: #0095a2;
+}
+
+.bodyForm{
+    background-color: #FFF;
+    padding: 20px 40px 40px 40px;
+    margin-bottom: 20px;
+    -webkit-box-shadow: 0 1px 3px rgba(0,0,0,.13);
+        -moz-box-shadow: 0 1px 3px rgba(0,0,0,.13);
+        box-shadow: 0 1px 3px rgba(0,0,0,.13);
+    border-radius: 3px;
+        -moz-border-radius: 3px;
+        -webkit-border-radius: 3px;
+}
+
+.bodyForm-signup{padding: 20px 40px 10px 40px;}
+.bodyForm h1{
+    text-transform: uppercase;
+    font-weight: bold;}
+    
+.bodyForm h1 span{color:#00ADBB;}
+.bodyForm h5{margin-bottom: 20px;}
+.florakb-error{
+    color: red;
+}

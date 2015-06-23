@@ -1,0 +1,64 @@
+<div class="container">
+    
+    <div class="form-signin">
+        <form role="form" action="{$basedomain}login/doSignup" method="POST" id="formSignup">
+            <div class="bodyForm bodyForm-signup">
+                <h1 class="text-center">Flora<span> Kalbar</span></h1>
+                <h5 class="text-center"></h5>
+                <input type="text" id="signup-name" class="form-control" name="name" placeholder="Name (Required)" required aria-required="true"/>
+                <div id="emailGroup">
+                    <input type="email" id="signup-email" class="form-control" name="email" placeholder="Email (Required)" required aria-required="true"/>
+                </div>
+                <div id="usernameGroup">
+                    <input type="text" id="signup-username" class="form-control" name="username" placeholder="Username (Required)" pattern="[a-zA-Z0-9_]+" required aria-required="true"/>
+                </div>
+                <div id="twitterGroup">
+                    <label for='signup-twitter' id="usernameValue" style="padding-top: 10px; margin-left: 10px; color: #555; position: absolute; display: none;z-index: 3;">@</label>
+                        <input type="text" id="signup-twitter" class="form-control" name="twitter" placeholder="Twitter" oninput="usernameValue()"/>
+                     <script language='javascript' type='text/javascript'>
+    					{literal}
+                        function usernameValue() {
+                            $('label#usernameValue').show();
+                            $('input#signup-twitter').css("padding-left","25px");
+                        }
+    					{/literal}
+                    </script>   
+                </div>
+                <input type="url" id="signup-website" class="form-control" name="website" placeholder="Website"/>
+                <input type="text" id="signup-phone" class="form-control" name="phone" placeholder="Phone"/>
+                <input type="password" id="signup-password" class="form-control" name="password" placeholder="Password (Required)" required aria-required="true"/>
+                <input type="password" id="signup-re_password" class="form-control" name="rePassword" placeholder="Retype Password (Required)" required aria-required="true" oninput="check(this)"/>
+                  
+                  <script language='javascript' type='text/javascript'>
+                    {literal}
+					function check(input) {
+                        if (input.value != document.getElementById('signup-password').value) {
+                            input.setCustomValidity('The two passwords must match.');
+                        } else {
+                            // input is valid -- reset the error message
+                            input.setCustomValidity('');
+                       }
+                    }
+					{/literal}
+                    </script>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+                <p class="text-right" style="margin-top: 10px;">Already a member? <a href="{$basedomain}login">Login now!</a></p>
+            </div>
+        </form>
+    </div>
+</div> <!-- /container -->
+
+<!--Message Modal-->
+<div class="modal fade bs-example-modal-sm" id="myModal" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-sm">
+
+    <div class="modal-content">
+        <div class="modal-header">
+            <h4 class="modal-title" id="myModalLabel">Flora Kalbar</h4>
+        </div>
+        <div class="modal-body messageRegister">
+            <p>Please wait...</p>
+      </div>
+    </div>
+  </div>
+</div>

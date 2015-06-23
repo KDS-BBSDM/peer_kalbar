@@ -1,0 +1,20 @@
+<div class="container">
+    
+    <div class="form-signin">
+        <form role="form" action="{$basedomain}login/doLogin" method="POST" id="formLogin">
+            <div class="bodyForm">
+                <h1 class="text-center">Flora<span> Kalbar</span></h1>
+                <h5 class="text-center">Please sign in to get access.</h5>
+                <input type="text" id="login-username" class="form-control" name="username" placeholder="Username" required autofocus>
+                <input type="password" id="login-password" class="form-control" name="password" placeholder="Password" required>
+                <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+                <div class="text-center" style="margin-top: 10px;">
+                    <a href="{$portaldomain}">Back to portal</a> | 
+                    <a href="{$basedomain}register/forgotPassword">Forgot Password?</a>
+                </div>
+            </div>
+        </form>
+        <a class="btn btn-lg btn-primary btn-block" href="{$basedomain}register" style="max-width: 450px;">Register</a>
+    </div>
+
+</div> <!-- /container -->
