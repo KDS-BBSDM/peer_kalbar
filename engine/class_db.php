@@ -113,8 +113,7 @@ class Database
 		
 		$this->open_connection($dbuse);
                 // cek server database yang dipakai
-                
-                logFile($data);
+		logFile($data);
 		switch ($dbConfig[$dbuse]['server'])
 		{
 			case 'mysql':
