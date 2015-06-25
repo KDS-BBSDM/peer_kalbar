@@ -37,7 +37,11 @@ class taxon extends Controller {
     
 	function getDataTaxon()
 	{
+		
+		echo '1';
 		$taxon =  $this->browseHelper->dataTaxon();
+		pr($taxon);
+		exit;
 		if ($taxon){
 			print json_encode($taxon);
 		}
