@@ -32,7 +32,7 @@ class taxon extends Controller {
 		// $data = $this->models->get_profile();
 		// pr($data);
 		return $this->loadView('viewprofile',$data);
-
+	
 	}
     
 	function getDataTaxon()
