@@ -1,19 +1,14 @@
 body {
-  padding-top: 80px;
-  background: url('../img/login_bg.JPG')no-repeat center center fixed; 
+  /**padding-top: 80px;
+  background: url('../img/login_bg.JPG')no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
-  background-size: cover;
+  background-size: cover;**/
+  background-color: #efefef;
 }
 
 body.signup{padding-top: 0;}
-
-.form-signin {
-  max-width: 450px;
-  padding: 15px;
-  margin: 0 auto;
-}
 
 .form-signin .form-control {
   position: relative;
@@ -80,3 +75,65 @@ body.signup{padding-top: 0;}
 .florakb-error{
     color: red;
 }
+
+/** HEADER CSS **/
+.flora-header{
+    padding: 1px 0 20px 0;
+    background-color: #ffffff;
+    border-top: 3px solid #00ADBB;
+    border-bottom: 1px solid #d9d9d9;
+    margin-bottom: 25px;
+}
+
+.flora-header h2, .flora-header span{font-weight: bold;font-size: 2.9vw;}
+
+.flora-header span.second_name{
+    color: #00ADBB;
+    padding-right: 10px;
+    border-right: 1px solid #AAAAAA;}
+
+.flora-header span.tagline{
+    color: #AAAAAA;
+    margin-top:30px;
+    font-size: 13px;
+    font-weight: normal;
+    margin-left: 25px;
+}
+
+.flora-header h2{font-size: 2.9vw;}
+
+/** CONTENT **/
+.flora-content{
+    background-color: #FFFFFF;
+    padding: 20px;
+    margin-bottom: 20px;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -webkit-box-shadow: 0 0 5px 0 #DEDEDE;
+    box-shadow: 0 0 5px 0 #DEDEDE;
+}
+
+.flora-content h3{
+    color: #00ADBB;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 15px;
+}
+
+.flora-content h5{
+    color: #3A3A3A;
+    font-weight: bold;
+}
+
+/** FOOTER CSS **/
+.footer {
+    position: absolute;
+    width: 100%;
+    padding: 15px 0;
+    margin-top: 15px;
+    background-color: #333333;
+    border-top: 3px solid #00ADBB;
+}
+
+.footer p{margin:0;color: #5a5a5a;}
+.footer a{color: #FFF; text-decoration: none;}
