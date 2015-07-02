@@ -53,7 +53,7 @@ class onebyone extends Controller {
 	    global $basedomain;
         $this->view->assign('msg', '');        	   
 		//header('Location: '.$basedomain.'onebyone/indivContent');
-        redirect($basedomain.'indivContent');
+        redirect($basedomain.'onebyone/indivContent');
 	}
     
     /**
