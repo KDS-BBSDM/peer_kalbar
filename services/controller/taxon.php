@@ -32,7 +32,7 @@ class taxon extends Controller {
 		// $data = $this->models->get_profile();
 		// pr($data);
 		return $this->loadView('viewprofile',$data);
-	
+
 	}
     
 	function getDataTaxon()
@@ -169,6 +169,18 @@ class taxon extends Controller {
 			print json_encode($img);
 		}
 		exit;
+	}
+
+	function dataIndivLimit()
+	{
+		$taxon =  $this->browseHelper->dataIndivLimit();
+		if ($taxon){
+			print json_encode($taxon);
+		}
+		exit;
+		/*
+			1. jika tidak ada parameter kedua maka get data 
+		*/
 	}
 
 	function validateToken()
