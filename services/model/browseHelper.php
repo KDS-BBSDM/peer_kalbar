@@ -14,6 +14,17 @@ class browseHelper extends Database {
     }
 
     /**
+     * @todo retrieve all data from table Taxon
+     * @return id, rank, morphotype, fam, gen, sp, subtype, ssp, auth, notes
+     */
+    function dataIndivLimit(){
+        $sql= "SELECT * FROM img WHERE md5sum <> '' GROUP BY indivID ORDER BY id DESC LIMIT 10";
+        $res = $this->fetch($sql,1);
+        $return['result'] = $res;
+        return $return;
+    }
+
+    /**
      * @todo retrieve all images from taxon data
      * @param $data = id taxon
      */
