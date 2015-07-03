@@ -54,11 +54,17 @@ class userHelper extends Database {
 		$salt = $CONFIG['default']['salt'];
 		$password = sha1($data['newPassword'].$salt);
         
-        $session = new Session;
-        $ses_user = $session->get_session();
-        $user = $ses_user;
+        if ($data['userid']){
+            $id = $data['userid'];
+        }else{
+            $session = new Session;
+            $ses_user = $session->get_session();
+            $user = $ses_user;     
+            $id = $user['login']['id'];       
+        }
         
-        $sql = "UPDATE `florakb_person` SET `password` = '".$password."', `salt` = '".$salt."' WHERE `id` = '".$user['login']['id']."' ";
+        
+        $sql = "UPDATE `florakb_person` SET `password` = '".$password."', `salt` = '".$salt."' WHERE `id` = '{$id}' ";
         $res = $this->query($sql,1);
         if($res){return true;}
     }

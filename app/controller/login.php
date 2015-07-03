@@ -105,6 +105,7 @@ class login extends Controller {
                 $this->view->assign('email',$data['email']);
                 $this->view->assign('username',$data['username']);
                 $this->view->assign('encode',$inflatData);
+                $this->view->assign('content',"pembuatan");
                 $msg = "<p>Hi ".$data['username']."!</p>";
                 $msg .= $this->loadView('emailTemplate');
                 // try to send mail 
@@ -130,7 +131,7 @@ class login extends Controller {
         //query data
         $getUserappData = $this->userHelper->getUserappData('username',$data['username'],1);
         $getUserData = $this->userHelper->getUserData('id',$getUserappData['id']);
-        
+        // pr($getUserData);
         $pwd = $data['password'];
         
         if(count($getUserData['id'])==1){

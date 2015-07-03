@@ -4,6 +4,7 @@
         <li class="{if $page.page=='home'}active{/if}">
             <a href="{$basedomain}">Dashboard</a>
         </li>
+        {if $page.page !='activate'}
         <li class="{if $page.page=='upload'}active{/if}">
             <a href="{$basedomain}upload">Batch Upload</a>
         </li>
@@ -24,6 +25,7 @@
                 </li>
             </ul>
         </li>
+        {/if}
     </ul>
 </div>
 <!-- /.navbar-collapse -->

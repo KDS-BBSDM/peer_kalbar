@@ -86,6 +86,7 @@ class user extends Controller {
     
     function doEditPassword(){
         $data = $_POST;
+        
         $editPassword = $this->userHelper->editPassword($data);
         
         if($editPassword){

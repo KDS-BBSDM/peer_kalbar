@@ -67,10 +67,10 @@ $().ready(function() {
     
     $("#formEditPassword").validate({
         rules: {
-			password: {
+			/*password: {
                 required: true,
                 checkPassword: true
-            },
+            },*/
             newPassword: {
                 required: true
             },
@@ -92,7 +92,7 @@ $().ready(function() {
         <div class="florakb-tabs">
             <ul class="nav nav-tabs" role="tablist" id="indivDetail-tabs">
               <li class="active"><a href="#editProfile" role="tab" data-toggle="tab">Sunting Profil</a></li>
-              <li><a href="#editPassword" role="tab" data-toggle="tab">Sunting Password</a></li>
+              <li><a href="#editPassword" role="tab" data-toggle="tab" id="tabPassword">Sunting Password</a></li>
             </ul>
         </div>
         
@@ -168,12 +168,12 @@ $().ready(function() {
           <div class="tab-pane" id="editPassword">
             <div class="florakb-tabscontent">
                 <form id="formEditPassword" method="POST" action="{$basedomain}user/doEditPassword" class="form-horizontal" role="form">
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="password" class="col-sm-2 control-label">Password Lama</label>
                         <div class="col-sm-5">
                             <input class="form-control" type="password" id="password" name="password" />
                         </div>
-                    </div>
+                    </div> -->
                     
                     <div class="form-group">
                         <label for="newPassword" class="col-sm-2 control-label">Password Baru</label>
@@ -191,6 +191,7 @@ $().ready(function() {
                     
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-5">
+                            <input type="hidden" name="userid" value="{$user.login.id}">
                           <button type="submit" class="btn florakb-btn">Submit</button>
                         </div>
                     </div>
@@ -203,3 +204,18 @@ $().ready(function() {
         
     </div>
 </div>
+
+{if $reset}
+    <script language='javascript' type='text/javascript'>
+    {literal}
+        $(document).ready(function(){
+
+            setTimeout(function(){ 
+                $('#tabPassword').trigger('click');
+                
+            }, 2000);
+            
+        })
+    {/literal}
+    </script>
+{/if}

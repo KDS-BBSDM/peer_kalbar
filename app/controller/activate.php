@@ -46,51 +46,68 @@ class activate extends Controller {
             $userMail = $decode['email'];
             $origToken = sha1($salt.$userMail);
 
-            // pr($decode);exit;
-            $getToken = $this->loginHelper->getEmailToken($decode['username']);
+            $token = sha1('reset'.$decode['email']);
 
+            $getToken = $this->loginHelper->getEmailToken($decode['username']);
+            
             if ($getToken['email_token']==$decode['validby']){
 
-                if ($decode['token']==$origToken){
-                    // is valid, then create account and set status to validate
+                if ($decode['reset']){
 
-                    if($decode['regfrom']==1){
-                        
-                        $this->view->assign('enterAccount',false);  
-                        $updateAccount = $this->loginHelper->updateUserStatus($decode['username']);
+                    $msg = $this->msg->display('all', false);
+                    $this->view->assign('msg', $msg);
+                    $ses_user = $this->loginHelper->getUserEmail($userMail, true);
+                    $newData['login'] = $ses_user;
+                    $this->view->assign('user', $newData);
+                    $this->view->assign('reset', true);
 
-                        if ($updateAccount){
+                    return $this->loadView('user/reset');
 
-                            $this->activityHelper->updateEmailLog(true, $userMail,'account',2);
+                }else{
 
-                            $dataUSer['username'] = $decode['username'];
-                            $dataUSer['password'] = $decode['password']; 
+                    if ($decode['token']==$origToken){
+                        // is valid, then create account and set status to validate
+
+                        if($decode['regfrom']==1){
                             
-                            createAccount($dataUSer);
-                            logFile('account ftp user '.$decode['email']. ' created');
+                            $this->view->assign('enterAccount',false);  
+                            $updateAccount = $this->loginHelper->updateUserStatus($decode['username']);
 
-                            $this->view->assign('validate','Validate account success');
-                            
+                            if ($updateAccount){
+
+                                $this->activityHelper->updateEmailLog(true, $userMail,'account',2);
+
+                                $dataUSer['username'] = $decode['username'];
+                                $dataUSer['password'] = $decode['password']; 
+                                
+                                createAccount($dataUSer);
+                                logFile('account ftp user '.$decode['email']. ' created');
+
+                                $this->view->assign('validate','Validate account success');
+                                
+
+                            }else{
+                                
+                                $this->view->assign('validate','Validate account error');
+                                logFile('update n_status user '.$decode['email'].' failed');
+                            }
 
                         }else{
-                            
-                            $this->view->assign('validate','Validate account error');
-                            logFile('update n_status user '.$decode['email'].' failed');
+
+                            $this->view->assign('email',$decode['email']);
+                            $this->view->assign('enterAccount',true);         
+                            return $this->loadView('validateProfile');
                         }
 
                     }else{
 
-                        $this->view->assign('email',$decode['email']);
-                        $this->view->assign('enterAccount',true);         
-                        return $this->loadView('validateProfile');
-                    }
-
-                }else{
-
-                    // invalid token
-                    $this->view->assign('validate','Validate account error');
-                    logFile('token mismatch');
+                        // invalid token
+                        $this->view->assign('validate','Validate account error');
+                        logFile('token mismatch');
+                    }   
                 }
+
+                
 
             }else{
 

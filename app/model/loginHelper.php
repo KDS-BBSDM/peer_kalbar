@@ -7,13 +7,14 @@ class loginHelper extends Database {
         global $basedomain;
         $this->loadmodule();
         $this->salt = '12345678PnD';
+
     }
     
     function loadmodule()
     {
         // include APP_MODELS.'activityHelper.php';
         // $this->activityHelper = new helper_model;
-       
+        
     }
 
 	function local($data=false)
@@ -192,6 +193,7 @@ class loginHelper extends Database {
         $salt = $res[0]['salt']; 
         $passwordDB = sha1($dataPassword."$salt");
         $password = $res[0]['password'];
+        logFile('passdb = '. $passwordDB . ' pass= ' . $password);
         if($passwordDB==$password){return TRUE;}
         return FALSE;
     }
@@ -253,15 +255,25 @@ class loginHelper extends Database {
 
         $filter = "";
 
-        if($username==false) return false;
+        if($email==false) return false;
         
         if($all) $filter = " * ";
         else $filter = " email ";
 
-        $sql = "SELECT {$filter} FROM `florakb_person` WHERE `email` = '".$email."' LIMIT 1";
+        $sql = "SELECT {$filter} FROM `person` WHERE `email` = '".$email."' LIMIT 1";
         // logFile($sql);
-        $res = $this->fetch($sql,0,1);
-        if ($res) return $res;
+        $res = $this->fetch($sql,0);
+        if ($res){
+            
+            $sql = "SELECT username, email_token FROM `florakb_person` WHERE `id` = '".$res['id']."' LIMIT 1";
+            // pr($res);
+            $result = $this->fetch($sql,0,1);
+
+            $res['username'] = $result['username'];
+            $res['email_token'] = $result['email_token'];
+
+            return $res;
+        } 
         return false;
     }
 
