@@ -3,12 +3,8 @@ config/access.php
 .htaccess
 tmp/*
 public_assets/*
-libs/smarty/*
-libs/excel/*
 logs/*
 cache/*
-dashboard/*
-plugin/*
 admin/CACHE/*
 admin/tmp/*
 admin/config/config.php
