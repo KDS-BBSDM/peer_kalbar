@@ -9,7 +9,7 @@ $().ready(function() {
                 checkNameExist: {
                     depends: function(element) {
                         // Do what you want to test
-                        return $('#name').val()=='{$user.login.name}';
+                        return $('#name').val()!='{$user.login.name}';
                       }
                 }
 			},
@@ -19,7 +19,7 @@ $().ready(function() {
                 checkEmailExist: {
                     depends: function(element) {
                         // Do what you want to test
-                        return $('#email').val()=='{$user.login.email}';
+                        return $('#email').val()!='{$user.login.email}';
                       }
                 }
 			},
@@ -38,7 +38,7 @@ $().ready(function() {
                 checkTwitterExist: {
                     depends: function(element) {
                         // Do what you want to test
-                        return $('#twitter').val()=='{$user.login.twitter}';
+                        return $('#twitter').val()!='{$user.login.twitter}';
                       }
                 }
 			},
