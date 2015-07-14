@@ -375,7 +375,8 @@ function sftpServices($host="localhost", $user=false, $pass=false, $filename=fal
 
 	$sftp = ssh2_sftp($connection);
 
-	
+	logFile('pathfile'.$pathFile);
+	logFile('filename'.$CONFIG['default']['upload_path'].$filename);
 	if (ssh2_scp_recv($connection, $pathFile, $CONFIG['default']['upload_path'].$filename)){
 
 		logFile('sftp move file to tmp');
