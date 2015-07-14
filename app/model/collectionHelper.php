@@ -1,13 +1,10 @@
 <?php
 class collectionHelper extends Database {
-
 	/* generate reference query */
-
 	var $user = null;
 	var $salt;
 	function __construct()
 	{
-
 		$session = new Session;
 		$getSessi = $session->get_session();
 		$this->user = $getSessi['login'];
@@ -15,7 +12,6 @@ class collectionHelper extends Database {
 		$this->salt = '12345678PnD';
 		$this->prefix = "florakb";
 	}
-
 	function loadmodule()
     {
         include APP_MODELS.'activityHelper.php';
@@ -24,7 +20,6 @@ class collectionHelper extends Database {
         // $this->helper_model = new helper_model;
        $this->activityHelper = new activityHelper;
     }
-
 	function insertReference($newData=array(),$priority=array())
 	{
 		if (empty($newData)) return false;
@@ -173,13 +168,11 @@ class collectionHelper extends Database {
 										'plantlist_kode'=>'unique_key',
 										'jenis'=>'gen',
 										);
-
 		return $arrFields[$table][$field];
 	}
 	
 	function insert_log_upload($filename)
 	{
-
 		$filename_encrypt = sha1(date('H:i:s'). $filename);
 		$userid = $this->user['id'];
 		$date = date('Y-m-d H:i:s');
@@ -190,13 +183,10 @@ class collectionHelper extends Database {
 		if ($res) return true;
 		return false;
 	}
-
 	/* insert data to tmp table */
 	function tmp_data($newData=array())
 	{
 		if (!is_array($newData)) return false;
-
-
 		// pr($newData);exit;
 		$defineTable = array('tmp_location', 'tmp_person', 'tmp_plant','tmp_photo');
 		
@@ -205,7 +195,6 @@ class collectionHelper extends Database {
 			$datas = array();
 			$fieldsTaxa = array();
 			$datasTaxa = array();
-
 			foreach ($newData[$k]['data'] as $value){
 				
 				foreach ($value as $key => $v){
@@ -215,21 +204,15 @@ class collectionHelper extends Database {
 						$fields[] = "`$translateField`";
 						$cleanData = addslashes($v);
 						$datas[] = "'$cleanData'";
-
 						if ($val == 'tmp_location'){
-
 							
 							if ($translateField == 'unique_key'){
-
 								$fields[] = "`locality`";
 								$datas[] = "'$cleanData'";
 							} 
 						}	
-
 						$updateTmp[] = "`$key` = '$cleanData'";
-
 						if ($val == 'tmp_plant'){
-
 							$translateFieldTaxa = $this->translateField('tmp_taxon', $key);
 							if ($translateFieldTaxa){
 								$fieldsTaxa[] = "`$translateFieldTaxa`";
@@ -237,11 +220,9 @@ class collectionHelper extends Database {
 								$datasTaxa[] = "'$cleanData'";
 								
 								if ($translateFieldTaxa == 'unique_key'){
-
 									$fieldsTaxa[] = "`kewid`";
 									$datasTaxa[] = "'$cleanData'";
 								}
-
 								$updateTmpTaxa[] = "`$key` = '$cleanData'";
 							}
 							
@@ -261,7 +242,6 @@ class collectionHelper extends Database {
 				$datas = null;
 				
 				if ($k==2){ // taxon
-
 					$tmpFieldTaxa = implode(',',$fieldsTaxa);
 					$tmpDataTaxa = implode(',',$datasTaxa);
 					$updateFIeldTaxa = implode(',', $updateTmpTaxa);
@@ -271,7 +251,6 @@ class collectionHelper extends Database {
 					$datasTaxa = null;
 				}
 				
-
 				
 			}
 			
@@ -322,7 +301,6 @@ class collectionHelper extends Database {
 		$query = $data['query'];
 		$unique = $data['uniqkey'];
 		$rawdataPerson = $data['rawdata']['person']['data'];
-
 		// pr($data);exit;
 		if ($query){
 			$i = 0;
@@ -351,19 +329,16 @@ class collectionHelper extends Database {
 					
 					// pr($tmpTable[$i]);
 					if ($defineTable[$i] == 'taxon'){
-
 						if (!$lastID){ echo "Taxon not complete"; exit;}
 						$updateTaxon = "UPDATE tmp_plant SET tmp_taxon_key = '{$lastID}' WHERE 
 								plantlist_kode = '{$unique[$val][$j]}' ";
 						// pr($updateTaxon);
 						$res = $this->query($updateTaxon,1);
-
 						$updateCreate = "UPDATE tmp_plant SET tmp_creator_key = '{$this->user['id']}' WHERE 
 								plantlist_kode = '{$unique[$val][$j]}' ";
 						// pr($updateTaxon);
 						usleep(500);
 						$res = $this->query($updateCreate,1);
-
 					}
 					
 					if ($defineTable[$i] == 'person'){
@@ -377,29 +352,22 @@ class collectionHelper extends Database {
 						// 		tree_id = '{$unique[$val][$j]}' ";
 						// pr($updatePhoto);
 						// $res = $this->query($updatePhoto,1);
-
 						// store account 
 						$date = date('Y-m-d H:i:s');
 						$username = substr(str_shuffle('abcdefghjkmn123456789'), 0, 8) ;
 						$password = "1234512345";
 						$email_token = sha1(CODEKIR.date('ymdhis'));
-
 						$storeAccount = "INSERT IGNORE INTO florakb_person (id, password, username, salt, n_status,register_date,email_token)
 										VALUES ({$lastID}, '{$password}','{$username}', '{$this->salt}',0,'{$date}','{$email_token}')";
 						logFile($storeAccount);
 						$resAccount = $this->query($storeAccount,1);
-
-
 						// check if system never send mail account to user
 						$to = $rawdataPerson[$j]['email'];
-
 						$storeLogEmail = $this->activityHelper->updateEmailLog(false,$to,'account',0);
-
 						
 					}
 					
 					if ($defineTable[$i] == 'locn'){
-
 						if (!$lastID){ echo "Location not complete"; exit;}
 						$updateLocn = "UPDATE tmp_plant SET tmp_location_key = '{$lastID}' WHERE 
 								locn = '{$unique[$val][$j]}' ";
@@ -412,7 +380,6 @@ class collectionHelper extends Database {
 				}
 				
 				$i++;
-
 				logFile('Store data '.$val.' success', $this->user['username']);
 			}
 			
@@ -526,7 +493,6 @@ class collectionHelper extends Database {
 				}
 				
 				$i++;
-
 				logFile('Store data '.$val.' success', $this->user['username']);
 				
 			}
@@ -589,7 +555,6 @@ class collectionHelper extends Database {
 				}
 				
 				$i++;
-
 				logFile('Store data '.$val.' success', $this->user['username']);
 			}
 			
@@ -707,7 +672,6 @@ class collectionHelper extends Database {
 			logFile('====COMMIT TRANSACTION====');
 			return true;
 		}
-
 		exit;
 		
 	}
@@ -873,10 +837,8 @@ class collectionHelper extends Database {
 		}
 		return $data;
 	}
-
 	function updateTmpPhoto($data=array())
 	{
-
 		$sql = "SELECT f.tree_id, p.tmp_person_key FROM tmp_photo AS f LEFT JOIN tmp_plant AS p 
 				ON f.tree_id = p.unique_key GROUP BY f.tree_id";
 		$res = $this->fetch($sql,1,1);
@@ -887,20 +849,17 @@ class collectionHelper extends Database {
 			}
 		}
 	}
-
 	function truncateData($ori=false, $tmp=false)
 	{
 		$data1 = array('collector','det','img','obs','coll','indiv','locn','person','taxon');
 		$data2 = array('tmp_location','tmp_person','tmp_photo','tmp_plant','tmp_taxon');
 		$success = true;
-
 		if ($ori){
 			foreach ($data1 as $val){
 				
 				$sql = $this->query("DELETE FROM ".$val);
 				if (!$sql) $success = false;
 			}
-
 		}
 		
 		if ($tmp){
@@ -910,7 +869,6 @@ class collectionHelper extends Database {
 				if (!$sqltmp) $success = false;
 			}
 		}
-
 		if ($success) return true;
 		return false;
 		
@@ -956,8 +914,5 @@ class collectionHelper extends Database {
 		logFile('====COMMIT TRANSACTION====');
 		return true;
 	}
-
-
 }
-
 ?>
