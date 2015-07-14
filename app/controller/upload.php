@@ -54,7 +54,7 @@ class upload extends Controller {
 		$username = $this->user['login']['username'];
 		
 		logFile(serialize($_FILES));
-
+		// pr($_FILES);exit;
 		if ($_FILES){
 			
 			$numberOfSheet = 4;
@@ -105,6 +105,7 @@ class upload extends Controller {
 				
 				/* here begin process */
 				if ($newData){
+					
 					
 					$emptyTmptable = $this->collectionHelper->truncateData(false,true);
 					
@@ -167,6 +168,10 @@ class upload extends Controller {
 								
 								$insertImage = $this->collectionHelper->storeSingleData($imgQuery,'img');
 								if ($insertImage){
+
+									$log_upload = $this->collectionHelper->insert_log_upload($_FILES[$formName]['name']);
+						
+									logFile('log xls file');
 
 									$this->collectionHelper->commitTransaction();
 

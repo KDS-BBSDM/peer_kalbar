@@ -13,6 +13,7 @@ class collectionHelper extends Database {
 		$this->user = $getSessi['login'];
 		$this->loadmodule();
 		$this->salt = '12345678PnD';
+		$this->prefix = "florakb";
 	}
 
 	function loadmodule()
@@ -176,10 +177,26 @@ class collectionHelper extends Database {
 		return $arrFields[$table][$field];
 	}
 	
+	function insert_log_upload($filename)
+	{
+
+		$filename_encrypt = sha1(date('H:i:s'). $filename);
+		$userid = $this->user['id'];
+		$date = date('Y-m-d H:i:s');
+		$sql = "INSERT INTO {$this->prefix}_upload_log (`userid`, `filename`, `desc`, `upload_date`)
+				VALUES ({$userid}, '{$filename_encrypt}', '{$filename}','{$date}') ";
+		// pr($sql);exit;
+		$res = $this->query($sql,1);
+		if ($res) return true;
+		return false;
+	}
+
 	/* insert data to tmp table */
 	function tmp_data($newData=array())
 	{
 		if (!is_array($newData)) return false;
+
+
 		// pr($newData);exit;
 		$defineTable = array('tmp_location', 'tmp_person', 'tmp_plant','tmp_photo');
 		
