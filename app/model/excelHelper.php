@@ -127,7 +127,7 @@ class excelHelper extends Database {
 				exit;
 			}
 			
-			logFile('parse data excel success, data= '. serialize($data));
+			logFile('parse data excel success');
 			// clean data, if empty pass
 			if ($data){
 				foreach ($data as $key=>$val){
@@ -330,7 +330,7 @@ class excelHelper extends Database {
 		$returnArr['rawdata'] = $arrTmp;
 		
 		// logFile(serialize($returnArr));
-		logFile(serialize($sql));
+		// logFile(serialize($sql));
 		logFile('referenceData ready');
 		
 		return $returnArr;
@@ -579,7 +579,7 @@ class excelHelper extends Database {
 		$returnArr['uniqkey'] = $dataKey;
 		$returnArr['rawdata'] = $arrTmp;
 		// pr($returnArr);
-		logFile(serialize($sql));
+		// logFile(serialize($sql));
 		logFile('parseMasterData success');
 		
 		return $returnArr;
@@ -590,7 +590,7 @@ class excelHelper extends Database {
 	{
 		global $C_SPEC;
 		
-		
+		logFile("validate field {$keyField} = {$v}");
 		if (!$defineTable && !$keyField && !$v) return false;
 		
 		$libsDefine = $C_SPEC[$defineTable][$keyField];

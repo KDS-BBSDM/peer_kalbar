@@ -103,7 +103,6 @@ class upload extends Controller {
 					
 				}
 				
-				// pr($newData);exit;
 				/* here begin process */
 				if ($newData){
 					
@@ -113,18 +112,15 @@ class upload extends Controller {
 						
 						logFile('empty tmp table before insert');
 
-						// sleep(1);
 						$referenceQuery = $this->collectionHelper->tmp_data($newData);
 
 						logFile('store data from xls to tmp table');
 
 						if ($referenceQuery){
 
-							// pr($newData);exit;
 					
 							// logFile('Preparing database ', $username);
 							$insertData = false;
-							// $referenceQuery = true;
 							if ($referenceQuery){
 								
 								$this->collectionHelper->startTransaction();
@@ -145,10 +141,7 @@ class upload extends Controller {
 								
 								$getMaster = $this->collectionHelper->getMasterData();
 								// insert indiv
-								// pr($getMaster);
 								$indivQuery = $this->excelHelper->parseMasterData($getMaster,true);
-								// pr($indivQuery);
-								// exit;
 								$insertIndiv = $this->collectionHelper->storeIndivData($indivQuery);
 								
 								// insert det,obs,coll
@@ -161,7 +154,6 @@ class upload extends Controller {
 								// update tmp photo
 								$updateTmpPhoto = $this->collectionHelper->updateTmpPhoto();
 
-								// exit;
 								// insert collector
 								$getMaster = $this->collectionHelper->getMasterData();
 								$collectorQuery = $this->excelHelper->parseMasterData($getMaster,true,5,'collector');
@@ -173,10 +165,7 @@ class upload extends Controller {
 
 								$imgQuery = $this->excelHelper->parseMasterData($getMaster,true,4,'img');
 								
-								// pr($imgQuery);
-								// exit;
 								$insertImage = $this->collectionHelper->storeSingleData($imgQuery,'img');
-								// pr($imgQuery);
 								if ($insertImage){
 
 									$this->collectionHelper->commitTransaction();
@@ -194,7 +183,6 @@ class upload extends Controller {
 							}
 							
 
-							// exit;
 							/*
 							[Old script]
 							
@@ -219,12 +207,12 @@ class upload extends Controller {
 								logFile('Insert xls success');
 								$this->log('upload','success upload xls');
 								print json_encode(array('status'=>true, 'finish'=>true, 'msg'=>'Insert success  ('. execTime($startTime,$endTime).')'));
-								// echo 'Insert success  ('. execTime($startTime,$endTime).')';	
 								
 								// send mail to user
 								
 
-								$sendMail = $this->sendMail();
+								// $sendMail = $this->sendMail();
+								
 								// if ($sendMail){
 								// 	logFile('Send mail success');
 								// 	print json_encode(array('status'=>true, 'finish'=>true, 'msg'=>'Insert success  ('. execTime($startTime,$endTime).')'));
