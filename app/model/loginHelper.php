@@ -243,15 +243,25 @@ class loginHelper extends Database {
 
         $filter = "";
 
-        if($username==false) return false;
+        if($email==false) return false;
         
         if($all) $filter = " * ";
         else $filter = " email ";
 
-        $sql = "SELECT {$filter} FROM `{$this->prefix}_person_extra` WHERE `email` = '".$email."' LIMIT 1";
+        $sql = "SELECT {$filter} FROM `{$this->prefix}_person` WHERE `email` = '".$email."' LIMIT 1";
         // logFile($sql);
-        $res = $this->fetch($sql,0,1);
-        if ($res) return $res;
+        $res = $this->fetch($sql,0);
+        if ($res){
+            
+            $sql = "SELECT username, email_token FROM `{$this->prefix}_person_extra` WHERE `id` = '".$res['id']."' LIMIT 1";
+            // pr($res);
+            $result = $this->fetch($sql,0,1);
+
+            $res['username'] = $result['username'];
+            $res['email_token'] = $result['email_token'];
+
+            return $res;
+        } 
         return false;
     }
 

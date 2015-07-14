@@ -45,7 +45,7 @@ class userHelper extends Database {
         //if($res && $res2){return true;}
         if($res){return true;}
     }
-    
+
     /**
      * @todo edit user password
      */
@@ -53,14 +53,20 @@ class userHelper extends Database {
         if($data==false) return false;
         
         global $CONFIG;
-		$salt = $CONFIG['default']['salt'];
-		$password = sha1($data['newPassword'].$salt);
+        $salt = $CONFIG['default']['salt'];
+        $password = sha1($data['newPassword'].$salt);
         
-        $session = new Session;
-        $ses_user = $session->get_session();
-        $user = $ses_user;
+        if ($data['userid']){
+            $id = $data['userid'];
+        }else{
+            $session = new Session;
+            $ses_user = $session->get_session();
+            $user = $ses_user;     
+            $id = $user['login']['id'];       
+        }
         
-        $sql = "UPDATE `{$this->prefix}_person` SET `password` = '".$password."', `salt` = '".$salt."' WHERE `id` = '".$user['login']['id']."' ";
+        
+        $sql = "UPDATE `{$this->prefix}_person_extra` SET `password` = '".$password."', `salt` = '".$salt."' WHERE `id` = '{$id}' ";
         $res = $this->query($sql,1);
         if($res){return true;}
     }
@@ -90,7 +96,7 @@ class userHelper extends Database {
         $filter = "";
         if ($n_status) $filter = " AND n_status = {$n_status}";
 
-        $sql = "SELECT * FROM `{$this->prefix}_person` WHERE `$field` = '".$data."' {$filter}";
+        $sql = "SELECT * FROM `{$this->prefix}_person_extra` WHERE `$field` = '".$data."' {$filter}";
         $res = $this->fetch($sql,0,1);  
         if(empty($res)){return false;}
         return $res; 
