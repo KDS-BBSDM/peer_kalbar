@@ -10,7 +10,7 @@ class collectionHelper extends Database {
 		$this->user = $getSessi['login'];
 		$this->loadmodule();
 		$this->salt = '12345678PnD';
-		$this->prefix = "florakb";
+		$this->prefix = "peerkalbar";
 	}
 	function loadmodule()
     {
@@ -357,7 +357,7 @@ class collectionHelper extends Database {
 						$username = substr(str_shuffle('abcdefghjkmn123456789'), 0, 8) ;
 						$password = "1234512345";
 						$email_token = sha1(CODEKIR.date('ymdhis'));
-						$storeAccount = "INSERT IGNORE INTO florakb_person (id, password, username, salt, n_status,register_date,email_token)
+						$storeAccount = "INSERT IGNORE INTO {$this->prefix}_person_extra (id, password, username, salt, n_status,register_date,email_token)
 										VALUES ({$lastID}, '{$password}','{$username}', '{$this->salt}',0,'{$date}','{$email_token}')";
 						logFile($storeAccount);
 						$resAccount = $this->query($storeAccount,1);
@@ -786,7 +786,7 @@ class collectionHelper extends Database {
 					$sql[] = "INSERT INTO {$index} ({$imp}) VALUES ({$imps})"; 
 				}
 				*/
-				$sql[] = "INSERT INTO {$index} ({$imp}) VALUES ({$imps}) ON DUPLICATE KEY UPDATE {$update}"; 
+				$sql[] = "INSERT INTO {$this->prefix}_{$index} ({$imp}) VALUES ({$imps}) ON DUPLICATE KEY UPDATE {$update}"; 
 			}
 			
 			
@@ -800,7 +800,7 @@ class collectionHelper extends Database {
 		
 		if (!$id && !$table && !$field) return false;
 		
-		$sql = "SELECT {$field} FROM {$table} WHERE {$cond} = '{$id}' LIMIT 1";
+		$sql = "SELECT {$field} FROM {$this->prefix}_{$table} WHERE {$cond} = '{$id}' LIMIT 1";
 		// pr($sql);
 		$res = $this->fetch($sql);
 		if ($res) return $res['id'];
@@ -827,7 +827,7 @@ class collectionHelper extends Database {
 		$value = implode (',',$tmpvalue);
 		$update = implode(',', $tmpUpdate);
 		
-		$sql = "INSERT INTO {$table} ({$field}) VALUES ({$value}) ON DUPLICATE KEY UPDATE {$update}";
+		$sql = "INSERT INTO {$this->prefix}_{$table} ({$field}) VALUES ({$value}) ON DUPLICATE KEY UPDATE {$update}";
 		$res = $this->query($sql);
 		logFile($sql);
 		if ($res){

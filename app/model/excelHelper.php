@@ -37,6 +37,7 @@ class excelHelper extends Database {
 		$this->log = $GLOBALS['CODEKIR']['LOGS'];
 		// $this->log->logActivity('upload','load excel success');
 		$this->locale = $LOCALE;
+		$this->prefix = "peerkalbar";
 	}
 
 	function loadexcel($file=false)
@@ -306,7 +307,7 @@ class excelHelper extends Database {
 					$update = implode(',', $tmpupdate);
 					// pr($tmpField);
 					if (!in_array($key,$ignoreTable)){
-						$sql[$defineTable[$key]][] = "INSERT INTO {$defineTable[$key]} ({$tmpField}) VALUES ({$tmpData}) ON DUPLICATE KEY UPDATE {$update} , id=LAST_INSERT_ID(id)";
+						$sql[$defineTable[$key]][] = "INSERT INTO {$this->prefix}_{$defineTable[$key]} ({$tmpField}) VALUES ({$tmpData}) ON DUPLICATE KEY UPDATE {$update} , id=LAST_INSERT_ID(id)";
 						
 						// $sql[$defineTable[$key]][] = "REPLACE INTO {$defineTable[$key]} ({$tmpField}) VALUES ({$tmpData}) ";
 						
@@ -559,7 +560,7 @@ class excelHelper extends Database {
 						$tmpField = implode(',',$t_field); 
 						$tmpData = implode(',',$t_data); 
 						$update = implode(',', $tmpupdate);
-						$sql[$b][] = "INSERT INTO {$b} ({$tmpField}) VALUES ({$tmpData}) ON DUPLICATE KEY UPDATE {$update} , id=LAST_INSERT_ID(id)";
+						$sql[$b][] = "INSERT INTO {$this->prefix}_{$b} ({$tmpField}) VALUES ({$tmpData}) ON DUPLICATE KEY UPDATE {$update} , id=LAST_INSERT_ID(id)";
 						// $sql[$b][] = "REPLACE INTO {$b} ({$tmpField}) VALUES ({$tmpData})";
 						
 						$arrTmp[$b]['data'][] = $t_dataraw;
