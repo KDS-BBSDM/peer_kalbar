@@ -4,6 +4,7 @@ config/access.php
 tmp/*
 public_assets/*
 logs/*
+doc/*
 cache/*
 libs/*
 admin/CACHE/*
