@@ -857,13 +857,13 @@ class collectionHelper extends Database {
 	}
 	function truncateData($ori=false, $tmp=false)
 	{
-		$data1 = array('collector','det','img','obs','coll','indiv','locn','person','taxon');
-		$data2 = array('tmp_location','tmp_person','tmp_photo','tmp_plant','tmp_taxon');
+		$data1 = array("{$this->prefix}_collector","{$this->prefix}_det","{$this->prefix}_img","{$this->prefix}_obs","{$this->prefix}_coll","{$this->prefix}_indiv","{$this->prefix}_locn","{$this->prefix}_person","{$this->prefix}_taxon");
+		$data2 = array("tmp_location","tmp_person","tmp_photo","tmp_plant","tmp_taxon");
 		$success = true;
 		if ($ori){
 			foreach ($data1 as $val){
 				
-				$sql = $this->query("DELETE FROM ".$val);
+				$sql = $this->query("TRUNCATE TABLE ".$val);
 				if (!$sql) $success = false;
 			}
 		}
@@ -871,7 +871,7 @@ class collectionHelper extends Database {
 		if ($tmp){
 			foreach ($data2 as $val){
 				
-				$sqltmp = $this->query("DELETE FROM ".$val,1);
+				$sqltmp = $this->query("TRUNCATE TABLE ".$val,1);
 				if (!$sqltmp) $success = false;
 			}
 		}
