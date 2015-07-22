@@ -161,7 +161,7 @@ class excelHelper extends Database {
 	
 	function referenceData($newData=array())
 	{
-		global $C_SPEC;
+		global $C_SPEC, $LOCALE;
 		if (empty($newData)) return false;
 		
 		$sql = array();
@@ -291,11 +291,11 @@ class excelHelper extends Database {
 					if ($defineTable[$key]=='person'){
 						$t_field[] = 'institutions';
 						$t_field[] = 'project';
-						$t_data[] = "'comunity kalbar'"; 
-						$t_data[] = "'Peer Project USAID-Harvard-UG-Surya Flora kalbar'"; 
+						$t_data[] = "'{$LOCALE['default']['xls_upload']['institution']}'"; 
+						$t_data[] = "'{$LOCALE['default']['project_title']}'"; 
 
-						$tmpupdate[] = "`institutions` = 'comunity kalbar'";
-						$tmpupdate[] = "`project` = 'Peer Project USAID-Harvard-UG-Surya Flora kalbar'";
+						$tmpupdate[] = "`institutions` = '{$LOCALE['default']['xls_upload']['institution']}'";
+						$tmpupdate[] = "`project` = '{$LOCALE['default']['project_title']}'";
 					}
 						
 

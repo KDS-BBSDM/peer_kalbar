@@ -204,6 +204,12 @@ class collectionHelper extends Database {
 						$fields[] = "`$translateField`";
 						$cleanData = addslashes($v);
 						$datas[] = "'$cleanData'";
+
+						if ($val == 'tmp_person' and $translateField == 'unique_key'){
+							$fields[] = "`name`";
+							$datas[] = "'$cleanData'";
+						}
+
 						if ($val == 'tmp_location'){
 							
 							if ($translateField == 'unique_key'){
