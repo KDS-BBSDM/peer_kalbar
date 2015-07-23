@@ -193,6 +193,23 @@ class zip extends Controller {
                                 $fileToInsert = array('filename' => $entry,'md5sum' => $image_name_encrypt, 'directory' => $folder, 'mimetype' => $fileinfo['mime']);
                                 
                                 if($dataExist){
+                                    
+                                    //get detail image
+                                    $detail_image = $this->imagezip->get_image_by_name($entry);
+                                    
+                                    if($detail_image['md5sum'])
+                                    {
+                                        $delete_image = array(
+                                            $path_img_ori.'/'.$detail_image['md5sum'].'.ori.jpg',
+                                            $path_img_1000px.'/'.$detail_image['md5sum'].'.1000px.jpg',
+                                            $path_img_500px.'/'.$detail_image['md5sum'].'.500px.jpg',
+                                            $path_img_100px.'/'.$detail_image['md5sum'].'.100px.jpg'
+                                        );
+                                        
+                                        //delete old image
+                                        $this->delete_img($delete_image);
+                                    }
+                                    
                                     copy($path_entry."/".$entry, $path_img_ori.'/'.$image_name_encrypt.'.ori.jpg');
                                     copy($path_entry."/".$entry, $path_img_1000px.'/'.$image_name_encrypt.'.1000px.jpg');
                                     if(!@ copy($path_entry."/".$entry, $path_img_1000px.'/'.$image_name_encrypt.'.1000px.jpg')){
@@ -271,7 +288,7 @@ class zip extends Controller {
                     //send dataNotExist information to user   
 
                     $status = 'success';
-                    $msg = 'File berhasil diekstrak';
+                    $msg = 'File berhasil diekstrak.';
                     $data['dataNotExist'] = $dataNotExist;
                 }
                 
@@ -385,6 +402,23 @@ class zip extends Controller {
                             $fileToInsert = array('filename' => $entry,'md5sum' => $image_name_encrypt, 'directory' => $folder, 'mimetype' => $fileinfo['mime']);
                             
                             if($dataExist){
+                                
+                                //get detail image
+                                $detail_image = $this->imagezip->get_image_by_name($entry);
+                                
+                                if($detail_image['md5sum'])
+                                {
+                                    $delete_image = array(
+                                        $path_img_ori.'/'.$detail_image['md5sum'].'.ori.jpg',
+                                        $path_img_1000px.'/'.$detail_image['md5sum'].'.1000px.jpg',
+                                        $path_img_500px.'/'.$detail_image['md5sum'].'.500px.jpg',
+                                        $path_img_100px.'/'.$detail_image['md5sum'].'.100px.jpg'
+                                    );
+                                    
+                                    //delete old image
+                                    $this->delete_img($delete_image);
+                                }
+                                
                                 copy($path_entry."/".$entry, $path_img_ori.'/'.$image_name_encrypt.'.ori.jpg');
                                 copy($path_entry."/".$entry, $path_img_1000px.'/'.$image_name_encrypt.'.1000px.jpg');
                                 if(!@ copy($path_entry."/".$entry, $path_img_1000px.'/'.$image_name_encrypt.'.1000px.jpg')){
@@ -612,6 +646,22 @@ class zip extends Controller {
         $username = 'nje';
         $filename = 'filenotexist.zip';
         
+    }
+    
+    /**
+     * move zip file from user folder (outside project folder) to tmp file inside project folder
+     * 
+     * @param $img_array = array img to delete with path
+     * */
+    function delete_img($img_array=NULL)
+    {
+        foreach ($img_array as $img)
+        {
+            if(file_exists($img))
+            {
+                unlink($img);
+            }
+        }
     }
 	
 }

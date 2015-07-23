@@ -98,6 +98,21 @@ class imagezip extends Database {
         return false;
         
     }
+    
+    /**
+     * get detail image by name
+     * 
+     * @param $name = original name of image
+     * @return query result
+     * 
+     * */
+    function get_image_by_name($filename){
+        $sql = "SELECT * FROM {$this->prefix}_img WHERE filename = '$filename'";
+		$res = $this->fetch($sql,0);
+        if($res) return $res;
+        return false;
+        
+    }
 }
 
 ?>
