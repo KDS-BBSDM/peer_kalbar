@@ -259,6 +259,19 @@ function createFolder($path_array, $permissions){
 }
 
 /**
+ * @todo create folder bash
+ * @param array $path_array = array contain folder that will be created array($path_1, $path_2)
+ * @param int $permission = value of permission access to folder
+ * */
+function shell_createFolder($path_array, $permissions){
+    foreach ($path_array as $dir) {
+        if (!is_dir($dir)){
+            shell_exec("mkdir -m $permissions $dir");
+        }
+    }
+}
+
+/**
  * @todo calculate excecution time
  * @param int $timeStart = start time in microtime
  * @param int $timeEnd = end time in microtime
