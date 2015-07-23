@@ -14,7 +14,7 @@ class browseHelper extends Database {
      * @return id, rank, morphotype, fam, gen, sp, subtype, ssp, auth, notes
      */
     function dataTaxon(){
-        $sql= "SELECT * FROM {$this->prefix}_taxon WHERE id in (SELECT det.taxonID FROM {$this->prefix}_det INNER JOIN {$this->prefix}_indiv on indiv.id = det.indivID WHERE indiv.n_status = 0)";
+        $sql= "SELECT * FROM {$this->prefix}_taxon WHERE id in (SELECT {$this->prefix}_det.taxonID FROM {$this->prefix}_det INNER JOIN {$this->prefix}_indiv on {$this->prefix}_indiv.id = {$this->prefix}_det.indivID WHERE {$this->prefix}_indiv.n_status = 0)";
         $res = $this->fetch($sql,1);
         $return['result'] = $res;
         return $return;
@@ -38,7 +38,7 @@ class browseHelper extends Database {
     function getImgTaxon($data){
         $sql = "SELECT * 
                 FROM `{$this->prefix}_det` INNER JOIN `{$this->prefix}_img` ON 
-                    det.taxonID='$data' AND det.indivID=img.indivID GROUP BY img.md5sum LIMIT 0,5";
+                    {$this->prefix}_det.taxonID='$data' AND {$this->prefix}_det.indivID={$this->prefix}_img.indivID GROUP BY {$this->prefix}_img.md5sum LIMIT 0,5";
         $res = $this->fetch($sql,1);
         return $res;
     }
@@ -48,7 +48,7 @@ class browseHelper extends Database {
      * @param $data = id title
      */
     function getTitle($data){
-        $sql = "SELECT sp FROM {$this->prefix}_taxon WHERE id = $data";
+        $sql = "SELECT {$this->prefix}_sp FROM {$this->prefix}_taxon WHERE id = $data";
         $res = $this->fetch($sql,1);
         return $res;
     }
@@ -58,7 +58,7 @@ class browseHelper extends Database {
      * @return 
      */
     function dataLocation(){
-        $sql= "SELECT * FROM `{$this->prefix}_locn` WHERE id in (SELECT indiv.locnID FROM {$this->prefix}_indiv inner join {$this->prefix}_det on indiv.id = det.indivID WHERE indiv.n_status = 0)";
+        $sql= "SELECT * FROM `{$this->prefix}_locn` WHERE id in (SELECT {$this->prefix}_indiv.locnID FROM {$this->prefix}_indiv inner join {$this->prefix}_det on {$this->prefix}_indiv.id = {$this->prefix}_det.indivID WHERE {$this->prefix}_indiv.n_status = 0)";
         $res = $this->fetch($sql,1);
         $return['result'] = $res;
         return $return;
@@ -84,12 +84,12 @@ class browseHelper extends Database {
     function dataIndivTaxon($value){
         $sql = "SELECT * 
                 FROM `{$this->prefix}_det` INNER JOIN `{$this->prefix}_indiv` ON 
-                    det.taxonID='$value' AND det.indivID=indiv.id AND indiv.n_status='0'
+                    {$this->prefix}_det.taxonID='$value' AND {$this->prefix}_det.indivID={$this->prefix}_indiv.id AND {$this->prefix}_indiv.n_status='0'
                 INNER JOIN `{$this->prefix}_person` ON
-                    indiv.personID=person.id
+                    {$this->prefix}_indiv.personID={$this->prefix}_person.id
                 INNER JOIN `{$this->prefix}_locn` ON
-                    locn.id=indiv.locnID
-                GROUP BY det.indivID";
+                    {$this->prefix}_locn.id={$this->prefix}_indiv.locnID
+                GROUP BY {$this->prefix}_det.indivID";
         
         $res = $this->fetch($sql,1);
         $return['result'] = $res;
