@@ -153,7 +153,14 @@ class zip extends Controller {
                 
                 $toCreate = array($path_img, $path_img_ori, $path_img_1000px, $path_img_500px, $path_img_100px);
                 $permissions = 0755;
-                createFolder($toCreate, $permissions);
+                if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
+                {
+                    createFolder($toCreate, $permissions);
+                }
+                else
+                {
+                    shell_createFolder($toCreate);
+                }
                 
                 $images = $this->GetContents($path_extract);
                 $list = count($images);
@@ -362,7 +369,14 @@ class zip extends Controller {
             
             $toCreate = array($path_img, $path_img_ori, $path_img_1000px, $path_img_500px, $path_img_100px);
             $permissions = 0755;
-            createFolder($toCreate, $permissions);
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
+            {
+                createFolder($toCreate, $permissions);
+            }
+            else
+            {
+                shell_createFolder($toCreate);
+            }
             
             $images = $this->GetContents($file);
             $list = count($images);
