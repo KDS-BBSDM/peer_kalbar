@@ -14,7 +14,7 @@ class browseHelper extends Database {
      * @return id, rank, morphotype, fam, gen, sp, subtype, ssp, auth, notes
      */
     function dataTaxon($start=0, $limit=20){
-        $sql= "SELECT * FROM {$this->prefix}_taxon WHERE id in (SELECT {$this->prefix}_det.taxonID FROM {$this->prefix}_det INNER JOIN {$this->prefix}_indiv on {$this->prefix}_indiv.id = {$this->prefix}_det.indivID WHERE {$this->prefix}_indiv.n_status = 0 LIMIT {$start}, $limit)";
+        $sql= "SELECT * FROM {$this->prefix}_taxon WHERE id in (SELECT {$this->prefix}_det.taxonID FROM {$this->prefix}_det INNER JOIN {$this->prefix}_indiv on {$this->prefix}_indiv.id = {$this->prefix}_det.indivID WHERE {$this->prefix}_indiv.n_status = 0 ) LIMIT {$start}, $limit";
         $res = $this->fetch($sql,1);
         $return['result'] = $res;
         return $return;
@@ -58,7 +58,7 @@ class browseHelper extends Database {
      * @return 
      */
     function dataLocation($start=0, $limit=20){
-        $sql= "SELECT * FROM `{$this->prefix}_locn` WHERE id in (SELECT {$this->prefix}_indiv.locnID FROM {$this->prefix}_indiv inner join {$this->prefix}_det on {$this->prefix}_indiv.id = {$this->prefix}_det.indivID WHERE {$this->prefix}_indiv.n_status = 0 LIMIT {$start}, $limit)";
+        $sql= "SELECT * FROM `{$this->prefix}_locn` WHERE id in (SELECT {$this->prefix}_indiv.locnID FROM {$this->prefix}_indiv inner join {$this->prefix}_det on {$this->prefix}_indiv.id = {$this->prefix}_det.indivID WHERE {$this->prefix}_indiv.n_status = 0 ) LIMIT {$start}, $limit";
         $res = $this->fetch($sql,1);
         $return['result'] = $res;
         return $return;
