@@ -330,7 +330,6 @@ class zip extends Controller {
             if(!is_dir($file)){
                 $status = "error";
                 $msg = "Sistem tidak dapat menemukan folder yang ditentukan";
-                $msg = $file;
                 
                 echo json_encode(array('status' => $status, 'message' => $msg));
                 exit;
