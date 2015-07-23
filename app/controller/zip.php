@@ -159,7 +159,7 @@ class zip extends Controller {
                 }
                 else
                 {
-                    shell_createFolder($toCreate, $permissions);
+                    shell_createFolder($toCreate);
                 }
                 
                 $images = $this->GetContents($path_extract);
