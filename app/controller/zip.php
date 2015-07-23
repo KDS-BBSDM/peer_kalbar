@@ -263,7 +263,7 @@ class zip extends Controller {
                 
                 $count_dataNotExist = count($dataNotExist);
                 
-                if($list = $dataNotExist){
+                if($list == $count_dataNotExist){
                     $status = 'warning';
                     $msg = 'File berhasil diekstrak. Tidak ada gambar yang sesuai dengan data.';
                     $data['dataNotExist'] = $dataNotExist;
@@ -455,7 +455,7 @@ class zip extends Controller {
             
             $count_dataNotExist = count($dataNotExist);
             
-            if($list = $dataNotExist){
+            if($list == $count_dataNotExist){
                 $status = 'warning';
                 $msg = 'File berhasil diekstrak. Tidak ada gambar yang sesuai dengan data.';
                 $data['dataNotExist'] = $dataNotExist;
