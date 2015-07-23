@@ -14,7 +14,7 @@ class browseHelper extends Database {
      * @return id, rank, morphotype, fam, gen, sp, subtype, ssp, auth, notes
      */
     function dataTaxon(){
-        $sql= "SELECT * FROM {$this->prefix}_taxon WHERE id in (SELECT det.taxonID FROM det INNER JOIN indiv on indiv.id = det.indivID WHERE indiv.n_status = 0)";
+        $sql= "SELECT * FROM {$this->prefix}_taxon WHERE id in (SELECT det.taxonID FROM {$this->prefix}_det INNER JOIN {$this->prefix}_indiv on indiv.id = det.indivID WHERE indiv.n_status = 0)";
         $res = $this->fetch($sql,1);
         $return['result'] = $res;
         return $return;
@@ -58,7 +58,7 @@ class browseHelper extends Database {
      * @return 
      */
     function dataLocation(){
-        $sql= "SELECT * FROM `{$this->prefix}_locn` WHERE id in (SELECT indiv.locnID FROM indiv inner join det on indiv.id = det.indivID WHERE indiv.n_status = 0)";
+        $sql= "SELECT * FROM `{$this->prefix}_locn` WHERE id in (SELECT indiv.locnID FROM {$this->prefix}_indiv inner join {$this->prefix}_det on indiv.id = det.indivID WHERE indiv.n_status = 0)";
         $res = $this->fetch($sql,1);
         $return['result'] = $res;
         return $return;
@@ -113,12 +113,12 @@ class browseHelper extends Database {
      * @return 
      */
     function dataIndivLocation($value){
-        $sql = "SELECT indiv.id as indivID, indiv.locnID, indiv.plot, indiv.tag, indiv.personID, locn.*, person.*
+        $sql = "SELECT {$this->prefix}_indiv.id as indivID, {$this->prefix}_indiv.locnID, {$this->prefix}_indiv.plot, {$this->prefix}_indiv.tag, {$this->prefix}_indiv.personID, {$this->prefix}_locn.*, {$this->prefix}_person.*
                     FROM `{$this->prefix}_indiv` INNER JOIN `{$this->prefix}_locn` ON 
-                        $value=indiv.locnID AND indiv.n_status='0'
+                        $value={$this->prefix}_indiv.locnID AND {$this->prefix}_indiv.n_status='0'
                     INNER JOIN `{$this->prefix}_person` ON
-                        indiv.personID=person.id
-                    GROUP BY indiv.id";
+                        {$this->prefix}_indiv.personID={$this->prefix}_person.id
+                    GROUP BY {$this->prefix}_indiv.id";
         
         $res = $this->fetch($sql,1);
         $return['result'] = $res;
@@ -132,14 +132,14 @@ class browseHelper extends Database {
      * @return 
      */
     function dataIndivPerson($value){
-        $sql = "SELECT indiv.id as indivID, indiv.locnID, indiv.plot, indiv.tag, indiv.personID, locn.*, person.*
+        $sql = "SELECT {$this->prefix}_indiv.id as indivID, {$this->prefix}_indiv.locnID, {$this->prefix}_indiv.plot, {$this->prefix}_indiv.tag, {$this->prefix}_indiv.personID, {$this->prefix}_locn.*, {$this->prefix}_person.*
                     FROM `{$this->prefix}_indiv` INNER JOIN `{$this->prefix}_locn` ON 
-                        $value=indiv.personID AND indiv.n_status='0'
+                        $value={$this->prefix}_indiv.personID AND {$this->prefix}_indiv.n_status='0'
                     INNER JOIN `{$this->prefix}_person` ON
-                        $value=person.id
+                        $value={$this->prefix}_person.id
                     INNER JOIN `{$this->prefix}_det` ON
-                        indiv.id=det.indivID
-                    GROUP BY indiv.id";
+                        {$this->prefix}_indiv.id={$this->prefix}_det.indivID
+                    GROUP BY {$this->prefix}_indiv.id";
         
         $res = $this->fetch($sql,1);
         $return['result'] = $res;
@@ -153,9 +153,9 @@ class browseHelper extends Database {
     function detailIndiv($data){
         $sql = "SELECT * 
                 FROM `{$this->prefix}_indiv` INNER JOIN `{$this->prefix}_locn` ON 
-                    indiv.id='$data' AND locn.id=indiv.locnID AND indiv.n_status='0'
+                    {$this->prefix}_indiv.id='$data' AND {$this->prefix}_locn.id={$this->prefix}_indiv.locnID AND {$this->prefix}_indiv.n_status='0'
                 INNER JOIN `{$this->prefix}_person` ON
-                    person.id=indiv.personID";
+                    {$this->prefix}_person.id={$this->prefix}_indiv.personID";
         $res = $this->fetch($sql,1);
         return $res;
     }
@@ -175,11 +175,11 @@ class browseHelper extends Database {
      * @param $data = id indiv
      */
     function dataDetIndiv($data){
-        $sql = "SELECT det.id as detID, det.*, taxon.*,person.* 
+        $sql = "SELECT {$this->prefix}_det.id as detID, det.*, taxon.*,person.* 
                 FROM `{$this->prefix}_det` INNER JOIN `{$this->prefix}_taxon` ON 
-                    indivID='$data' AND taxon.id=det.taxonID AND det.n_status='0'
+                    indivID='$data' AND {$this->prefix}_taxon.id={$this->prefix}_det.taxonID AND {$this->prefix}_det.n_status='0'
                 INNER JOIN `{$this->prefix}_person` ON
-                    person.id=det.personID";
+                    {$this->prefix}_person.id={$this->prefix}_det.personID";
         $res = $this->fetch($sql,1);
         return $res;
     }
@@ -189,9 +189,9 @@ class browseHelper extends Database {
      * @param $data = id indiv
      */
     function dataObsIndiv($data){
-        $sql = "SELECT obs.id as obsID, obs.*, person.* 
+        $sql = "SELECT {$this->prefix}_obs.id as obsID, {$this->prefix}_obs.*, {$this->prefix}_person.* 
                 FROM `{$this->prefix}_obs` INNER JOIN `{$this->prefix}_person` ON 
-                    indivID='$data' AND person.id=obs.personID AND obs.n_status='0'";
+                    indivID='$data' AND {$this->prefix}_person.id={$this->prefix}_obs.personID AND {$this->prefix}_obs.n_status='0'";
         $res = $this->fetch($sql,1);
         return $res;
     }
