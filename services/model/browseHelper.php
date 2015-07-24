@@ -13,11 +13,42 @@ class browseHelper extends Database {
      * @todo retrieve all data from table Taxon
      * @return id, rank, morphotype, fam, gen, sp, subtype, ssp, auth, notes
      */
-    function dataTaxon($start=0, $limit=20){
-        $sql= "SELECT * FROM {$this->prefix}_taxon WHERE id in (SELECT {$this->prefix}_det.taxonID FROM {$this->prefix}_det INNER JOIN {$this->prefix}_indiv on {$this->prefix}_indiv.id = {$this->prefix}_det.indivID WHERE {$this->prefix}_indiv.n_status = 0 ) LIMIT {$start}, $limit";
+    function dataTaxon($data, $start=0, $limit=20){
+
+        /* start param datatables */
+        $limit= $data['limit'];
+        $order= $data['order'];
+        $kondisi= trim($data['condition']);
+        if($kondisi!="")$kondisi=" and $kondisi";
+        /* end param datatables */
+
+        $sql= "SELECT * FROM {$this->prefix}_taxon WHERE id in (SELECT {$this->prefix}_det.taxonID FROM {$this->prefix}_det INNER JOIN {$this->prefix}_indiv on {$this->prefix}_indiv.id = {$this->prefix}_det.indivID WHERE {$this->prefix}_indiv.n_status = 0 ) {$kondisi} {$order} LIMIT {$limit} ";
+        // pr($sql);
         $res = $this->fetch($sql,1);
-        $return['result'] = $res;
-        return $return;
+        if ($res){
+
+            foreach ($res as $key => $value) {
+                $sql = "SELECT img.md5sum 
+                        FROM `{$this->prefix}_det` AS det INNER JOIN `{$this->prefix}_img` AS img ON 
+                            det.taxonID='{$value[id]}' AND det.indivID=img.indivID GROUP BY img.md5sum LIMIT 5";
+                // pr($sql);
+                $result = $this->fetch($sql,1);
+                $img = array();
+                if (is_array($result)){
+
+                    foreach ($result as $val) {
+                        if ($val['md5sum']) $img[] = $val['md5sum'];
+                    }
+
+                    $res[$key]['img'] = $img;
+                }
+                    
+            }
+            
+        }
+        // pr($res);
+        // $return = $res;
+        return $res;
     }
 
     /**

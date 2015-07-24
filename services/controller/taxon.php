@@ -17,6 +17,8 @@ class taxon extends Controller {
 			exit;
 		} 
 		// $this->validatePage();
+
+		$this->prefix = "peerkalbar";
 	}
 	public function loadmodule()
 	{
@@ -35,8 +37,44 @@ class taxon extends Controller {
 
 	}
     
+    function handleRequest()
+    {
+
+    	$this->serverSide = $this->loadModel('serverSide');
+		$serverside = new serverSide;
+
+		$decodeData = array("{$this->prefix}_indiv.n_status"=>0);
+
+		$SSConfig['APIHelper']    = 'browseHelper';
+		$SSConfig['APIFunction']  = 'dataTaxon';
+		$SSConfig['filter']       = $decodeData;
+
+
+		$SSConfig['primaryTable'] = "{$this->prefix}_taxon";
+		$SSConfig['primaryField'] = "id";
+		$SSConfig['searchField'] = array('morphotype', 'fam', 'gen', 'sp');
+
+
+		$SSConfig['view'][1] = "morphotype";
+		$SSConfig['view'][2] = "family"; 
+		$SSConfig['view'][3] = "gen";
+		$SSConfig['view'][4] = "sp";
+		$SSConfig['view'][5] = "image|img|sp|id";
+		$SSConfig['view'][6] = "detail|$basedomain/browse/indiv/|id=id&action=indivTaxon";
+		
+
+		$output = $this->serverSide->dTableData($SSConfig);
+
+		echo json_encode($output);
+
+		exit;
+    }
+
 	function getDataTaxon()
 	{
+
+		// pr($_GET);
+		// exit;
 		$taxon =  $this->browseHelper->dataTaxon();
 		if ($taxon){
 			print json_encode($taxon);
