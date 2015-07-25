@@ -43,31 +43,89 @@ class taxon extends Controller {
     	$this->serverSide = $this->loadModel('serverSide');
 		$serverside = new serverSide;
 
-		$decodeData = array("{$this->prefix}_indiv.n_status"=>0);
+		$loadFunction = $_GET['function'];
 
-		$SSConfig['APIHelper']    = 'browseHelper';
-		$SSConfig['APIFunction']  = 'dataTaxon';
-		$SSConfig['filter']       = $decodeData;
-
-
-		$SSConfig['primaryTable'] = "{$this->prefix}_taxon";
-		$SSConfig['primaryField'] = "id";
-		$SSConfig['searchField'] = array('morphotype', 'fam', 'gen', 'sp');
-
-
-		$SSConfig['view'][1] = "morphotype";
-		$SSConfig['view'][2] = "family"; 
-		$SSConfig['view'][3] = "gen";
-		$SSConfig['view'][4] = "sp";
-		$SSConfig['view'][5] = "image|img|sp|id";
-		$SSConfig['view'][6] = "detail|$basedomain/browse/indiv/|id=id&action=indivTaxon";
-		
+		$SSConfig = $this->$loadFunction();
 
 		$output = $this->serverSide->dTableData($SSConfig);
 
 		echo json_encode($output);
 
 		exit;
+    }
+
+    function taxonConfig()
+    {
+    	global $portaldomain;
+
+    	$decodeData = array("{$this->prefix}_indiv.n_status"=>0);
+
+    	$SSConfig['APIHelper']    = 'browseHelper';
+		$SSConfig['APIFunction']  = 'dataTaxon';
+		$SSConfig['filter']       = $decodeData;
+
+    	$SSConfig['primaryTable'] = "{$this->prefix}_taxon";
+		$SSConfig['primaryField'] = "id";
+		$SSConfig['searchField'] = array('morphotype', 'fam', 'gen', 'sp');
+
+		$SSConfig['view'][1] = "morphotype";
+		$SSConfig['view'][2] = "fam"; 
+		$SSConfig['view'][3] = "gen";
+		$SSConfig['view'][4] = "sp";
+		$SSConfig['view'][5] = "image|img|sp|id";
+		$SSConfig['view'][6] = "detail|{$portaldomain}browse/indiv/|id=id&action=indivTaxon";
+		
+		return $SSConfig;
+    }
+
+    function locationConfig()
+    {
+    	global $portaldomain;
+
+    	$decodeData = array("{$this->prefix}_indiv.n_status"=>0);
+
+    	$SSConfig['APIHelper']    = 'browseHelper';
+		$SSConfig['APIFunction']  = 'dataLocation';
+		$SSConfig['filter']       = $decodeData;
+
+    	$SSConfig['primaryTable'] = "{$this->prefix}_locn";
+		$SSConfig['primaryField'] = "id";
+		$SSConfig['searchField'] = array('province', 'island', 'country', 'elev','locality','county');
+
+		$SSConfig['view'][1] = "province";
+		$SSConfig['view'][2] = "island"; 
+		$SSConfig['view'][3] = "country";
+		$SSConfig['view'][4] = "elev";
+		$SSConfig['view'][5] = "locality";
+		$SSConfig['view'][6] = "county";
+		$SSConfig['view'][8] = "detail|{$portaldomain}browse/indiv/|id=id&action=indivLocn";
+		
+		return $SSConfig;
+    }
+
+    function personConfig()
+    {
+    	global $portaldomain;
+
+    	$decodeData = array("{$this->prefix}_indiv.n_status"=>0);
+
+    	$SSConfig['APIHelper']    = 'browseHelper';
+		$SSConfig['APIFunction']  = 'dataPerson';
+		$SSConfig['filter']       = $decodeData;
+
+    	$SSConfig['primaryTable'] = "{$this->prefix}_person";
+		$SSConfig['primaryField'] = "id";
+		$SSConfig['searchField'] = array('name', 'twitter', 'website', 'institutions','project');
+
+		// $SSConfig['view'][1] = "id";
+		$SSConfig['view'][1] = "name";
+		$SSConfig['view'][2] = "twitter"; 
+		$SSConfig['view'][3] = "website";
+		$SSConfig['view'][4] = "institutions";
+		$SSConfig['view'][5] = "project";
+		$SSConfig['view'][6] = "detail|{$portaldomain}browse/indiv/|id=id&action=indivPerson";
+		
+		return $SSConfig;
     }
 
 	function getDataTaxon()

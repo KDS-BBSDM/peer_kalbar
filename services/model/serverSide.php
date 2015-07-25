@@ -101,38 +101,33 @@ class ServerSide extends Database {
 		$dataParam['limit']="$sLimit";
 
 		$SSData = $data;
-		$data = $API->$data['APIFunction']($dataParam);	
+		$alldata = $API->$data['APIFunction']($dataParam);	
 		
-		// pr($data);
+		$data = $alldata['data'];
+
 		/* Data set length after filtering */
-		$sQuery = "
-				SELECT FOUND_ROWS()
-			";
+		$sQuery = " SELECT FOUND_ROWS() AS total";
 		// $rResultFilterTotal = $this->query($sQuery);
-		$aResultFilterTotal = $this->fetch($sQuery);
-
-		$iFilteredTotal = $aResultFilterTotal[0];
-
-		
+		// $aResultFilterTotal = $this->fetch($sQuery);
+		// pr($aResultFilterTotal);
+		$iFilteredTotal = $alldata['dataset'];
+		// pr($iFilteredTotal);
+		// pr($aResultFilterTotal);
 		/* Total data set length */
 		$sQuery = "
-				SELECT COUNT(`" . $sIndexColumn . "`)
+				SELECT COUNT(`" . $sIndexColumn . "`) AS total
 				FROM   $sTable
 			";
-
-		//echo "$sQuery";
-		// $rResultTotal = $this->query($sQuery);
+		// pr($sQuery);
 		$aResultTotal = $this->fetch($sQuery);
-		//pr($aResultTotal );
-		$iTotal = $aResultTotal[0];
-
+		$iTotal = $alldata['dataTotal'];
 		/*
 		 * Output
 		 */
 		$output = array(
 		    "sEcho" => intval($_GET['sEcho']),
 		    "iTotalRecords" => $iTotal,
-		    "iTotalDisplayRecords" => $iFilteredTotal,
+		    "iTotalDisplayRecords" => $iTotal,
 		    "aaData" => array()
 		);
 
@@ -171,7 +166,7 @@ class ServerSide extends Database {
 
 			            		$impl = implode('&', $concate);
 			            		$completeURi = $impl; 
-								
+								// pr($expl);
 								$row[] = $this->additional('detail', array('url'=>$expl[1]. "?" . $completeURi));
 			            	
 			            	}else{
@@ -260,6 +255,7 @@ class ServerSide extends Database {
 
 		// pr($data);
 		global $app_domain, $portaldomain;
+		// pr($portaldomain);
 		if ($id){
 			switch ($id) {
 				case 'checkbox':
@@ -272,7 +268,7 @@ class ServerSide extends Database {
 				
 				
 				case 'detail':
-					return "<a href={$portaldomain}.$data[url] class='btn flora-btn'>Detail</a>";
+					return "<a href=$data[url] class='btn flora-btn'>Detail</a>";
 					break;
 
 				case 'image':

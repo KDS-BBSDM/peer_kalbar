@@ -22,9 +22,35 @@ class browseHelper extends Database {
         if($kondisi!="")$kondisi=" and $kondisi";
         /* end param datatables */
 
-        $sql= "SELECT * FROM {$this->prefix}_taxon WHERE id in (SELECT {$this->prefix}_det.taxonID FROM {$this->prefix}_det INNER JOIN {$this->prefix}_indiv on {$this->prefix}_indiv.id = {$this->prefix}_det.indivID WHERE {$this->prefix}_indiv.n_status = 0 ) {$kondisi} {$order} LIMIT {$limit} ";
+        $sql= "SELECT * FROM {$this->prefix}_taxon 
+                WHERE id IN 
+                (
+                    SELECT {$this->prefix}_det.taxonID 
+                    FROM {$this->prefix}_det 
+                    INNER JOIN {$this->prefix}_indiv 
+                    ON {$this->prefix}_indiv.id = {$this->prefix}_det.indivID 
+                    WHERE {$this->prefix}_indiv.n_status = 0 
+                ) 
+                {$kondisi} {$order} 
+                LIMIT {$limit} ";
         // pr($sql);
         $res = $this->fetch($sql,1);
+
+        $rowsFilter = $this->fetch("SELECT FOUND_ROWS() AS total");
+
+        $tQuery = "SELECT COUNT(id) AS total FROM {$this->prefix}_taxon 
+                    WHERE id IN 
+                    (
+                        SELECT {$this->prefix}_det.taxonID 
+                        FROM {$this->prefix}_det 
+                        INNER JOIN {$this->prefix}_indiv 
+                        ON {$this->prefix}_indiv.id = {$this->prefix}_det.indivID 
+                        WHERE {$this->prefix}_indiv.n_status = 0 
+                    ) 
+                    {$kondisi}";
+                    // pr($tQuery);
+        $rowsTotal = $this->fetch($tQuery);
+        // pr($rows);
         if ($res){
 
             foreach ($res as $key => $value) {
@@ -46,9 +72,12 @@ class browseHelper extends Database {
             }
             
         }
-        // pr($res);
-        // $return = $res;
-        return $res;
+        
+        $dataArray['dataset'] = $rowsFilter['total'];
+        $dataArray['dataTotal'] = $rowsTotal['total'];
+        $dataArray['data'] = $res;
+
+        return $dataArray;
     }
 
     /**
@@ -88,22 +117,83 @@ class browseHelper extends Database {
      * @todo retrieve all data from table location
      * @return 
      */
-    function dataLocation($start=0, $limit=20){
-        $sql= "SELECT * FROM `{$this->prefix}_locn` WHERE id in (SELECT {$this->prefix}_indiv.locnID FROM {$this->prefix}_indiv inner join {$this->prefix}_det on {$this->prefix}_indiv.id = {$this->prefix}_det.indivID WHERE {$this->prefix}_indiv.n_status = 0 ) LIMIT {$start}, $limit";
+    function dataLocation($data, $start=0, $limit=20){
+
+        /* start param datatables */
+        $limit= $data['limit'];
+        $order= $data['order'];
+        $kondisi= trim($data['condition']);
+        if($kondisi!="")$kondisi=" and $kondisi";
+        /* end param datatables */
+
+        $sql= "SELECT * FROM `{$this->prefix}_locn` 
+                WHERE id IN 
+                (
+                    SELECT {$this->prefix}_indiv.locnID 
+                    FROM {$this->prefix}_indiv 
+                    INNER JOIN {$this->prefix}_det 
+                    ON {$this->prefix}_indiv.id = {$this->prefix}_det.indivID 
+                    WHERE {$this->prefix}_indiv.n_status = 0 
+                ) 
+                {$kondisi} {$order} 
+                LIMIT {$limit}";
+
         $res = $this->fetch($sql,1);
-        $return['result'] = $res;
-        return $return;
+        $rowsFilter = $this->fetch("SELECT FOUND_ROWS() AS total");
+        $tQuery = "SELECT COUNT(id) AS total FROM `{$this->prefix}_locn` 
+                    WHERE id IN 
+                    (
+                        SELECT {$this->prefix}_indiv.locnID 
+                        FROM {$this->prefix}_indiv 
+                        INNER JOIN {$this->prefix}_det 
+                        ON {$this->prefix}_indiv.id = {$this->prefix}_det.indivID 
+                        WHERE {$this->prefix}_indiv.n_status = 0 
+                    ) 
+                    {$kondisi}";
+                    // pr($tQuery);
+        $rowsTotal = $this->fetch($tQuery);
+
+        if ($res)
+        {
+            $dataArray['dataset'] = $rowsFilter['total'];
+            $dataArray['dataTotal'] = $rowsTotal['total'];
+            $dataArray['data'] = $res;
+
+            return $dataArray;
+        }
+
+        return false;
     }
 
     /**
      * @todo retrieve all data from table person
      * @return 
      */
-    function dataPerson($start=0, $limit=20){
-        $sql= "SELECT * FROM `{$this->prefix}_person` LIMIT {$start}, $limit";
+    function dataPerson($data, $start=0, $limit=20){
+
+        /* start param datatables */
+        $limit= $data['limit'];
+        $order= $data['order'];
+        $kondisi= trim($data['condition']);
+        if($kondisi!="")$kondisi=" and $kondisi";
+        /* end param datatables */
+
+
+        $sql= "SELECT * FROM `{$this->prefix}_person` {$kondisi} {$order} LIMIT {$limit}";
         $res = $this->fetch($sql,1);
-        $return['result'] = $res;
-        return $return;
+
+        $rowsFilter = $this->fetch("SELECT FOUND_ROWS() AS total");
+        $rowsTotal = $this->fetch("SELECT COUNT(id) AS total FROM {$this->prefix}_person");
+
+        if ($res){
+
+            $dataArray['dataset'] = $rowsFilter['total'];
+            $dataArray['dataTotal'] = $rowsTotal['total'];
+            $dataArray['data'] = $res;
+
+            return $dataArray;
+        }
+        return false;
     }
 	
     /**
