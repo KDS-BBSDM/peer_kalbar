@@ -378,7 +378,7 @@ class upload extends Controller {
 
 	function truncate()
 	{
-		$this->collectionHelper->truncateData($main=1,$extra=0);
+		$this->collectionHelper->truncateData($main=0,$extra=0);
 	}
 	
 	function logUploadUser($file)
