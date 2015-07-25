@@ -95,7 +95,7 @@ class ServerSide extends Database {
 		}
 
 
-		//echo $sWhere;
+		// echo $sLimit;
 		$dataParam['condition']="$sWhere ";
 		$dataParam['order']=$sOrder;  
 		$dataParam['limit']="$sLimit";
