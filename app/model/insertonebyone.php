@@ -154,7 +154,7 @@ class insertonebyone extends Database {
                 
                 //insert to table florakb_person
                 $dataPass = array('id' => $insert['lastid'], 'password' => $password, 'username' => $username, 'salt' => $salt, 'register_date' => $register_date, 'email_token' => $token);
-                $insert_dataPas = $this->insertData('florakb_person',$dataPass,true);
+                $insert_dataPas = $this->insertData('person_extra',$dataPass,true);
                 
                 if ($insert_dataPas['status'] == 0){
         			$this->rollback();
