@@ -159,7 +159,7 @@ class onebyone extends Controller {
     public function insertPerson(){
         $data = $_POST;
         ob_start();
-        $insertData = $this->insertonebyone->insertTransaction('person',$data);
+        $insertData = $this->insertonebyone->insertTransaction('person_extra',$data);
         
         //manual submission form
         /*if($insertData){
