@@ -49,7 +49,6 @@ class taxon extends Controller {
 
 		$output = $this->serverSide->dTableData($SSConfig);
 		header('Access-Control-Allow-Origin: *');
-		header("Access-Control-Allow-Headers: *");
 		echo json_encode($output);
 
 		exit;
