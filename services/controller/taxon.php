@@ -211,6 +211,18 @@ class taxon extends Controller {
 		*/
 	}
 
+	function getDataIndiv()
+	{
+		$indiv =  $this->browseHelper->dataIndiv();
+		if ($indiv){
+			print json_encode($indiv);
+		}
+		exit;
+		/*
+			1. jika tidak ada parameter kedua maka get data 
+		*/
+	}
+
 	function getIndivTaxon()
 	{
 		$id = $_GET['id'];
