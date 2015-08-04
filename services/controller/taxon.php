@@ -100,7 +100,7 @@ class taxon extends Controller {
 		$SSConfig['view'][4] = "elev";
 		$SSConfig['view'][5] = "locality";
 		$SSConfig['view'][6] = "county";
-		$SSConfig['view'][8] = "detail|{$portaldomain}browse/indiv/|id=id&action=indivLocn";
+		$SSConfig['view'][7] = "detail|{$portaldomain}browse/indiv/|id=id&action=indivLocn";
 		
 		return $SSConfig;
     }
@@ -149,7 +149,7 @@ class taxon extends Controller {
 		$SSConfig['view'][2] = "locality"; 
 		$SSConfig['view'][3] = "pendata";
 		$SSConfig['view'][4] = "image|img|sp|id";
-		$SSConfig['view'][5] = "detail|{$portaldomain}browse/indiv/|id=id&action=indivTaxon";
+		$SSConfig['view'][5] = "detail|{$portaldomain}browse/indiv/|id=indivCode";
 		
 		return $SSConfig;
     }
