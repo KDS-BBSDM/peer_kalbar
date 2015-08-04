@@ -128,6 +128,30 @@ class taxon extends Controller {
 		return $SSConfig;
     }
 
+    function indivConfig()
+    {
+    	global $portaldomain;
+
+    	$decodeData = array("{$this->prefix}_indiv.n_status"=>0);
+
+    	$SSConfig['APIHelper']    = 'browseHelper';
+		$SSConfig['APIFunction']  = 'dataIndiv';
+		$SSConfig['filter']       = $decodeData;
+
+    	$SSConfig['primaryTable'] = "{$this->prefix}_indiv";
+		$SSConfig['primaryField'] = "id";
+		$SSConfig['searchField'] = array("{$this->prefix}_indiv.id", "{$this->prefix}_locn.locality", "{$this->prefix}_person.name");
+
+		// $SSConfig['view'][1] = "id";
+		$SSConfig['view'][1] = "indivCode";
+		$SSConfig['view'][2] = "locality"; 
+		$SSConfig['view'][3] = "pendata";
+		$SSConfig['view'][4] = "image|img|sp|id";
+		$SSConfig['view'][5] = "detail|{$portaldomain}browse/indiv/|id=id&action=indivTaxon";
+		
+		return $SSConfig;
+    }
+
     function cors() {
 
 	    // Allow from any origin

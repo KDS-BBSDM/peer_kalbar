@@ -201,15 +201,31 @@ class browseHelper extends Database {
      * 
      * @return 
      */
-    function dataIndiv($start=0, $limit=20){
+    function dataIndiv($data, $start=0, $limit=20){
+
+        /* start param datatables */
+        $limit= $data['limit'];
+        $order= $data['order'];
+        $kondisi= trim($data['condition']);
+        if($kondisi!="")$kondisi=" and $kondisi";
+        /* end param datatables */
+
         $sql = "SELECT {$this->prefix}_indiv.id as indivCode, {$this->prefix}_locn.locality as locality, {$this->prefix}_person.name as pendata
                 FROM `{$this->prefix}_indiv` INNER JOIN `{$this->prefix}_person` ON
                     {$this->prefix}_indiv.personID={$this->prefix}_person.id AND {$this->prefix}_indiv.n_status='0'
                 INNER JOIN `{$this->prefix}_locn` ON
                     {$this->prefix}_indiv.locnID={$this->prefix}_locn.id
-                GROUP BY {$this->prefix}_indiv.id LIMIT {$start}, {$limit}";
-        
+                GROUP BY {$this->prefix}_indiv.id {$kondisi} {$order} LIMIT {$limit}";
+        logFile($sql);
         $res = $this->fetch($sql,1);
+
+        $rowsFilter = $this->fetch("SELECT FOUND_ROWS() AS total");
+        $rowsTotal = $this->fetch("SELECT COUNT({$this->prefix}_indiv.id) AS total FROM `{$this->prefix}_indiv` INNER JOIN `{$this->prefix}_person` ON
+                    {$this->prefix}_indiv.personID={$this->prefix}_person.id AND {$this->prefix}_indiv.n_status='0'
+                INNER JOIN `{$this->prefix}_locn` ON
+                    {$this->prefix}_indiv.locnID={$this->prefix}_locn.id {$kondisi}");
+
+
         if ($res){
             foreach ($res as $key => $value) {
                 //print_r($value);exit;
@@ -230,8 +246,14 @@ class browseHelper extends Database {
             }
         }
         //pr($res);exit;
-        $return['result'] = $res;
-        return $return;
+        // $return['result'] = $res;
+        // return $return;
+
+        $dataArray['dataset'] = $rowsFilter['total'];
+        $dataArray['dataTotal'] = $rowsTotal['total'];
+        $dataArray['data'] = $res;
+
+        return $dataArray;
     }
 	
     /**
