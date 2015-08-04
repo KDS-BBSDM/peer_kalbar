@@ -56,7 +56,7 @@ class browseHelper extends Database {
             foreach ($res as $key => $value) {
                 $sql = "SELECT img.md5sum 
                         FROM `{$this->prefix}_det` AS det INNER JOIN `{$this->prefix}_img` AS img ON 
-                            det.taxonID='{$value[id]}' AND det.indivID=img.indivID GROUP BY img.md5sum LIMIT 5";
+                            det.taxonID='{$value[id]}' AND det.indivID=img.indivID GROUP BY img.md5sum LIMIT 3";
                 // pr($sql);
                 $result = $this->fetch($sql,1);
                 $img = array();
@@ -229,7 +229,7 @@ class browseHelper extends Database {
         if ($res){
             foreach ($res as $key => $value) {
                 //print_r($value);exit;
-                $sql = "SELECT md5sum FROM `{$this->prefix}_img` WHERE indivID = {$res[$key]['indivCode']}  LIMIT 5";
+                $sql = "SELECT md5sum FROM `{$this->prefix}_img` WHERE indivID = {$res[$key]['indivCode']}  LIMIT 3";
                 //pr($sql);
                 $result = $this->fetch($sql,1);
 
