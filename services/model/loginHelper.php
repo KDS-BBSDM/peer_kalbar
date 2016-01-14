@@ -212,5 +212,28 @@ class loginHelper extends Database {
         global $basedomain;  
         header( 'Location: '.$basedomain ) ;  
     }
+
+    function goLogin($data)
+    {
+
+        $email = $data['email'];
+        
+        $sql = "SELECT id FROM `peerkalbar_person` WHERE `email` = '{$email}' LIMIT 1";
+        $res = $this->fetch($sql,1);
+        if ($res){
+            foreach ($res as $key => $value) {
+
+                $sql = "SELECT salt, password FROM `peerkalbar_person_extra` WHERE `id` = '{$value['id']}' LIMIT 1";
+                $result = $this->fetch($sql,1,1);
+                
+                $pass = sha1($data['password'].$result[0]['salt']);
+
+                if ($pass == $result[0]['password']) return true;
+                return false;
+            }
+        }
+
+        return false;
+    }
 }
 ?>
