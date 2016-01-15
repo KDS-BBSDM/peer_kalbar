@@ -37,6 +37,11 @@ class taxon extends Controller {
 
 	}
     
+    public function insert(){
+        $output = array('status' => TRUE);
+        echo json_encode($output);
+    }
+    
     function handleRequest()
     {
 
