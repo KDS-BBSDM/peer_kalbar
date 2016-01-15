@@ -141,100 +141,207 @@ class ServerSide extends Database {
 		        
 		        foreach ($SSData['view'] as $key => $val) {
 		            
-		        	$tmp = explode('|', $val);
+		            if (is_array($val)){
+
+		            	$rowTmp = array();
+		            	foreach ($val as $k => $v) {
+		            		
+		            		$tmp = explode('|', $v);
 		        	
-		        	if (count($tmp)>1){
+				        	if (count($tmp)>1){
 
-		        		if ($tmp[0] == 'detail'){
+				        		if ($tmp[0] == 'detail'){
 
-			            	$expl = explode('|', $val);
+					            	$expl = explode('|', $v);
 
-			            	if (count($expl)>2){
-			            		$concate = array();
-			            		$getParam = explode('&', $expl[2]);
-			            		for ($i=0; $i < count($getParam); $i++) { 
+					            	if (count($expl)>2){
+					            		$concate = array();
+					            		$getParam = explode('&', $expl[2]);
+					            		for ($i=0; $i < count($getParam); $i++) { 
 
-			            			if ($i==0){
-			            				$expParam = explode('=', $getParam[$i]);
-			            				$concate[] = $expParam[0] . '=' .$value[$expParam[1]];
-			            			}else{
-			            				$expParam = explode('=', $getParam[$i]);
-			            				$concate[] = $expParam[0] . '=' .$expParam[1];
-			            			}
-			            			
-			            		}
+					            			if ($i==0){
+					            				$expParam = explode('=', $getParam[$i]);
+					            				$concate[] = $expParam[0] . '=' .$value[$expParam[1]];
+					            			}else{
+					            				$expParam = explode('=', $getParam[$i]);
+					            				$concate[] = $expParam[0] . '=' .$expParam[1];
+					            			}
+					            			
+					            		}
 
-			            		$impl = implode('&', $concate);
-			            		$completeURi = $impl; 
-								// pr($expl);
-								$row[] = $this->additional('detail', array('url'=>$expl[1]. "?" . $completeURi));
-			            	
-			            	}else{
-			            		$row[] = $this->additional('detail', array('url'=>$expl[1]));
-			            	}
-			            	
-			            	
-			            }else if ($tmp[0] == 'checkbox'){
+					            		$impl = implode('&', $concate);
+					            		$completeURi = $impl; 
+										// pr($expl);
+										$rowTmp[] = $this->additional('detail', array('url'=>$expl[1]. "?" . $completeURi, 'caption'=>ucfirst($k)));
+					            		
+					            	}else{
+					            		$rowTmp[] = $this->additional('detail', array('url'=>$expl[1], 'caption'=>ucfirst($k)));
+					            	}
+					            	
+					            
+					            }else if ($tmp[0] == 'checkbox'){
 
-			            	$expl = explode('|', $val);
+					            	$expl = explode('|', $val);
 
-			            	if (count($expl)>2){
-			            		$concate = array();
-			            		$getParam = explode('&', $expl[2]);
-			            		for ($i=0; $i < count($getParam); $i++) { 
-			            			
-			            			$concate[] = $value[$getParam[$i]];
-			            		}
+					            	if (count($expl)>2){
+					            		$concate = array();
+					            		$getParam = explode('&', $expl[2]);
+					            		for ($i=0; $i < count($getParam); $i++) { 
+					            			
+					            			$concate[] = $value[$getParam[$i]];
+					            		}
 
 
-			            		$impl = implode('_', $concate);
-			            		$completeURi = $impl; 
-								// pr($value);
-								$checked = false;
-								
-								if ($value['checked']) $checked = true;
-								// echo $tmp[1]; 
-								if ($tmp[1]=="Layanan"){
-									if ($value['noKontrak']!=""){
-										$row[] = $this->span();
+					            		$impl = implode('_', $concate);
+					            		$completeURi = $impl; 
+										// pr($value);
+										$checked = false;
 										
-									}else{
-										$row[] = $this->additional('checkbox', array('name'=>$expl[1], 'value'=>$completeURi, 'checked'=>$checked));
-									} 
-								}else{
+										if ($value['checked']) $checked = true;
+										// echo $tmp[1]; 
+										if ($tmp[1]=="Layanan"){
+											if ($value['noKontrak']!=""){
+												$row[] = $this->span();
+												
+											}else{
+												$row[] = $this->additional('checkbox', array('name'=>$expl[1], 'value'=>$completeURi, 'checked'=>$checked));
+											} 
+										}else{
 
-									$row[] = $this->additional('checkbox', array('name'=>$expl[1], 'value'=>$completeURi, 'checked'=>$checked));
-								}
-								
+											$row[] = $this->additional('checkbox', array('name'=>$expl[1], 'value'=>$completeURi, 'checked'=>$checked));
+										}
+										
 
-								
-			            	
-			            	}else{
-			            		$row[] = $this->additional('checkbox', array('name'=>$expl[1]));
-			            	}
+										
+					            	
+					            	}else{
+					            		$row[] = $this->additional('checkbox', array('name'=>$expl[1]));
+					            	}
 
-			            }else if ($tmp[0] == 'image'){
+					            }else if ($tmp[0] == 'image'){
 
-			            	$expl = explode('|', $val);
+					            	$expl = explode('|', $v);
 
-			            	// pr($value);
-			            	$concate = array();
-			            	$concate['file'] = $value[$expl[1]];
-			            	$concate['title'] = $value[$expl[2]];
-			            	$concate['id'] = $value[$expl[3]];
+					            	// pr($v);
+					            	$concate = array();
+					            	$concate['file'] = $val[$expl[1]];
+					            	$concate['title'] = $val[$expl[2]];
+					            	$concate['id'] = $val[$expl[3]];
 
-		            		$row[] = $this->additional('image', $concate);
-			            	
-			            }
+				            		$row[] = $this->additional('image', $concate);
+					            	
+					            }
 
-			            else $row[]=$value[$tmp[0]] . ' / ' . $value[$tmp[1]];
+					            else $row[]=$val[$tmp[0]] . ' / ' . $val[$tmp[1]];
 
-		        	}else{
+				        	}else{
 
-		        		
-		            	$row[] = $value[$val];
-			            
-		        	}
+				        		
+				            	$row[] = $val[$val];
+					            
+				        	}
+		            	}
+
+	            		$implodeRowTmp = implode(' ', $rowTmp);
+	            		$row[] = $implodeRowTmp;
+		            }else{
+
+		            	$tmp = explode('|', $val);
+		        	
+				        	if (count($tmp)>1){
+
+				        		if ($tmp[0] == 'detail'){
+
+					            	$expl = explode('|', $val);
+
+					            	if (count($expl)>2){
+					            		$concate = array();
+					            		$getParam = explode('&', $expl[2]);
+					            		for ($i=0; $i < count($getParam); $i++) { 
+
+					            			if ($i==0){
+					            				$expParam = explode('=', $getParam[$i]);
+					            				$concate[] = $expParam[0] . '=' .$value[$expParam[1]];
+					            			}else{
+					            				$expParam = explode('=', $getParam[$i]);
+					            				$concate[] = $expParam[0] . '=' .$expParam[1];
+					            			}
+					            			
+					            		}
+
+					            		$impl = implode('&', $concate);
+					            		$completeURi = $impl; 
+										// pr($expl);
+										$row[] = $this->additional('detail', array('url'=>$expl[1]. "?" . $completeURi));
+					            	
+					            	}else{
+					            		$row[] = $this->additional('detail', array('url'=>$expl[1]));
+					            	}
+					            	
+					            	
+					            }else if ($tmp[0] == 'checkbox'){
+
+					            	$expl = explode('|', $val);
+
+					            	if (count($expl)>2){
+					            		$concate = array();
+					            		$getParam = explode('&', $expl[2]);
+					            		for ($i=0; $i < count($getParam); $i++) { 
+					            			
+					            			$concate[] = $value[$getParam[$i]];
+					            		}
+
+
+					            		$impl = implode('_', $concate);
+					            		$completeURi = $impl; 
+										// pr($value);
+										$checked = false;
+										
+										if ($value['checked']) $checked = true;
+										// echo $tmp[1]; 
+										if ($tmp[1]=="Layanan"){
+											if ($value['noKontrak']!=""){
+												$row[] = $this->span();
+												
+											}else{
+												$row[] = $this->additional('checkbox', array('name'=>$expl[1], 'value'=>$completeURi, 'checked'=>$checked));
+											} 
+										}else{
+
+											$row[] = $this->additional('checkbox', array('name'=>$expl[1], 'value'=>$completeURi, 'checked'=>$checked));
+										}
+										
+
+										
+					            	
+					            	}else{
+					            		$row[] = $this->additional('checkbox', array('name'=>$expl[1]));
+					            	}
+
+					            }else if ($tmp[0] == 'image'){
+
+					            	$expl = explode('|', $val);
+
+					            	// pr($v);
+					            	$concate = array();
+					            	$concate['file'] = $value[$expl[1]];
+					            	$concate['title'] = $value[$expl[2]];
+					            	$concate['id'] = $value[$expl[3]];
+
+				            		$row[] = $this->additional('image', $concate);
+					            	
+					            }
+
+					            else $row[]=$value[$tmp[0]] . ' / ' . $value[$tmp[1]];
+
+				        	}else{
+
+				        		
+				            	$row[] = $value[$val];
+					            
+				        	}
+		            }
+		        	
 
 		            
 
@@ -268,7 +375,7 @@ class ServerSide extends Database {
 				
 				
 				case 'detail':
-					return "<a href=$data[url] class='btn flora-btn'>Detail</a>";
+					return "<a href=$data[url] class='btn flora-btn'>$data[caption]</a>";
 					break;
 
 				case 'image':
