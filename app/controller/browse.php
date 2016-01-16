@@ -182,6 +182,9 @@ class browse extends Controller {
      */
     function indivDetail(){
         $indivID = $_GET['id'];
+
+        $getURI = parseURI($_GET);
+        $indivID = $getURI[3];               
         //get whole data indiv detail
         $indivDetail = $this->browseHelper->detailIndiv($indivID);
         //get determinant from selected indiv

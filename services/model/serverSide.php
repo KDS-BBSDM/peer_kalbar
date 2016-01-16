@@ -171,8 +171,8 @@ class ServerSide extends Database {
 
 					            		$impl = implode('&', $concate);
 					            		$completeURi = $impl; 
-										// pr($expl);
-										$rowTmp[] = $this->additional('detail', array('url'=>$expl[1]. "?" . $completeURi, 'caption'=>ucfirst($k)));
+										// pr($concate);
+										$rowTmp[] = $this->additional('detail', array('url'=>$expl[1]. $value[$expParam[1]]. '/?' . $completeURi, 'caption'=>ucfirst($k)));
 					            		
 					            	}else{
 					            		$rowTmp[] = $this->additional('detail', array('url'=>$expl[1], 'caption'=>ucfirst($k)));

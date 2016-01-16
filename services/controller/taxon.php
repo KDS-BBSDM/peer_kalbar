@@ -201,7 +201,9 @@ class taxon extends Controller {
 	function getImgTaxon()
 	{
 		$id = $_GET['id'];
-		$img =  $this->browseHelper->getImgTaxon($id);
+		$dataID = parseURI($_GET);
+		
+		$img =  $this->browseHelper->getImgTaxon($dataID[3]);
 		if ($img){
 			print json_encode($img);
 		}

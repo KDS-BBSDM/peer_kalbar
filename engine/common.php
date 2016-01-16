@@ -471,5 +471,9 @@ function sendGlobalMail($to,$from,$msg,$config=true){
 	
 }
 
-
+function parseURI($data)
+{
+	if (!is_array($data)) return false;
+	return explode('/', key($data));
+}
 ?>
