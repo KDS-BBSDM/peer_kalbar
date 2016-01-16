@@ -157,11 +157,13 @@ class ServerSide extends Database {
 					            	if (count($expl)>2){
 					            		$concate = array();
 					            		$getParam = explode('&', $expl[2]);
+					            		// pr($getParam);
 					            		for ($i=0; $i < count($getParam); $i++) { 
 
 					            			if ($i==0){
 					            				$expParam = explode('=', $getParam[$i]);
 					            				$concate[] = $expParam[0] . '=' .$value[$expParam[1]];
+					            				$idData = $value[$expParam[1]];
 					            			}else{
 					            				$expParam = explode('=', $getParam[$i]);
 					            				$concate[] = $expParam[0] . '=' .$expParam[1];
@@ -171,8 +173,9 @@ class ServerSide extends Database {
 
 					            		$impl = implode('&', $concate);
 					            		$completeURi = $impl; 
-										// pr($concate);
-										$rowTmp[] = $this->additional('detail', array('url'=>$expl[1]. $value[$expParam[1]]. '/?' . $completeURi, 'caption'=>ucfirst($k)));
+										// pr($idData);
+										// pr($value);exit;
+										$rowTmp[] = $this->additional('detail', array('url'=>$expl[1]. $idData. '/?' . $completeURi, 'caption'=>ucfirst($k)));
 					            		
 					            	}else{
 					            		$rowTmp[] = $this->additional('detail', array('url'=>$expl[1], 'caption'=>ucfirst($k)));
