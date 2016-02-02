@@ -22,7 +22,7 @@ $CONFIG['services']['login'] = 'login';
 $CONFIG['services']['base_url'] = 'http://localhost/florakb/flora-kalbar.info/services/';
 $CONFIG['services']['root_path'] = $_SERVER['DOCUMENT_ROOT'].'/florakb/flora-kalbar.info/services';
 $CONFIG['services']['app_url'] = 'http://localhost/florakb/floraINA-peerkalbar/';
-$CONFIG['services']['portal_url'] = 'http://localhost/florakb/floraINA-peerkalbar/';
+$CONFIG['services']['portal_url'] = 'http://localhost/florakb/floraINA-portal/';
 $CONFIG['services']['upload_path'] = $_SERVER['DOCUMENT_ROOT'].'/florakb/flora-kalbar.info/public_assets/';
 
 $CONFIG['services']['max_filesize'] = 2097152;
