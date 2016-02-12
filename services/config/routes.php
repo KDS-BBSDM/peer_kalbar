@@ -8,6 +8,7 @@
 $ROUTES = array(
 				'home',
 				'taxon',
-				'auth'
+				'auth',
+				'specimen'
 );
 ?>

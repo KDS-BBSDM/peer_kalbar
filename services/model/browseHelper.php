@@ -1,7 +1,7 @@
 <?php
 
 class browseHelper extends Database {
-	
+    
     var $prefix;
     function __construct()
     {
@@ -120,7 +120,9 @@ class browseHelper extends Database {
     function dataLocation($data, $start=0, $limit=20){
 
         /* start param datatables */
-        $limit= $data['limit'];
+        if ($data['limit'] != "") {
+            $limit= $data['limit'];
+        }
         $order= $data['order'];
         $kondisi= trim($data['condition']);
         if($kondisi!="")$kondisi=" and $kondisi";
@@ -137,6 +139,7 @@ class browseHelper extends Database {
                 ) 
                 {$kondisi} {$order} 
                 LIMIT {$limit}";
+                print_r($sql);die;
 
         $res = $this->fetch($sql,1);
         $rowsFilter = $this->fetch("SELECT FOUND_ROWS() AS total");
@@ -150,6 +153,55 @@ class browseHelper extends Database {
                         WHERE {$this->prefix}_indiv.n_status = 0 
                     ) 
                     {$kondisi}";
+                    // pr($tQuery);
+        $rowsTotal = $this->fetch($tQuery);
+
+        if ($res)
+        {
+            $dataArray['dataset'] = $rowsFilter['total'];
+            $dataArray['dataTotal'] = $rowsTotal['total'];
+            $dataArray['data'] = $res;
+
+            return $dataArray;
+        }
+
+        return false;
+    }
+
+    function dataLocationAll($limit){
+
+        $sql= "SELECT * FROM `{$this->prefix}_locn` 
+                    ORDER BY id DESC
+                    LIMIT {$limit}";
+
+        $res = $this->fetch($sql,1);
+        $rowsFilter = $this->fetch("SELECT FOUND_ROWS() AS total");
+        $tQuery = "SELECT COUNT(id) AS total FROM `{$this->prefix}_locn` 
+                    LIMIT {$limit}";
+                    // pr($tQuery);
+        $rowsTotal = $this->fetch($tQuery);
+
+        if ($res)
+        {
+            $dataArray['dataset'] = $rowsFilter['total'];
+            $dataArray['dataTotal'] = $rowsTotal['total'];
+            $dataArray['data'] = $res;
+
+            return $dataArray;
+        }
+
+        return false;
+    }
+
+    function dataLocationId($id){
+
+        $sql= "SELECT * FROM `{$this->prefix}_locn` 
+                WHERE id = '{$id}'";
+
+        $res = $this->fetch($sql,1);
+        $rowsFilter = $this->fetch("SELECT FOUND_ROWS() AS total");
+        $tQuery = "SELECT COUNT(id) AS total FROM `{$this->prefix}_locn` 
+                    WHERE id = '{id}'";
                     // pr($tQuery);
         $rowsTotal = $this->fetch($tQuery);
 
@@ -184,6 +236,50 @@ class browseHelper extends Database {
 
         $rowsFilter = $this->fetch("SELECT FOUND_ROWS() AS total");
         $rowsTotal = $this->fetch("SELECT COUNT(id) AS total FROM {$this->prefix}_person");
+
+        if ($res){
+
+            $dataArray['dataset'] = $rowsFilter['total'];
+            $dataArray['dataTotal'] = $rowsTotal['total'];
+            $dataArray['data'] = $res;
+
+            return $dataArray;
+        }
+        return false;
+    }
+
+    function dataPersonAll($limit){
+
+        // $sql= "SELECT * FROM `{$this->prefix}_person` LIMIT {$limit}";
+        // $res = $this->fetch($sql,1);
+
+        // $rowsFilter = $this->fetch("SELECT FOUND_ROWS() AS total");
+        // $rowsTotal = $this->fetch("SELECT COUNT(id) AS total FROM {$this->prefix}_person");
+
+        // if ($res){
+
+        //     $dataArray['dataset'] = $rowsFilter['total'];
+        //     $dataArray['dataTotal'] = $rowsTotal['total'];
+        //     $dataArray['data'] = $res;
+
+        //     return $dataArray;
+        // }
+        // return false;
+            $sql = "SELECT count(DISTINCT personID) as dataTotal
+                FROM `{$this->prefix}_indiv` LIMIT {$limit}";
+        
+        $res = $this->fetch($sql,1);
+        $return['result'] = $res;
+        return $return;
+    }
+
+    function dataPersonId($id){
+
+        $sql= "SELECT * FROM `{$this->prefix}_person` where id = '{$id}'";
+        $res = $this->fetch($sql,1);
+
+        $rowsFilter = $this->fetch("SELECT FOUND_ROWS() AS total");
+        $rowsTotal = $this->fetch("SELECT COUNT(id) AS total FROM {$this->prefix}_person where id = '{$id}'");
 
         if ($res){
 
@@ -255,7 +351,103 @@ class browseHelper extends Database {
 
         return $dataArray;
     }
-	
+
+    function dataIndivAll($limit){
+
+        $sql = "SELECT {$this->prefix}_indiv.id as indivCode, {$this->prefix}_locn.locality as locality, {$this->prefix}_person.name as pendata
+                FROM `{$this->prefix}_indiv` INNER JOIN `{$this->prefix}_person` ON
+                    {$this->prefix}_indiv.personID={$this->prefix}_person.id AND {$this->prefix}_indiv.n_status='0'
+                INNER JOIN `{$this->prefix}_locn` ON
+                    {$this->prefix}_indiv.locnID={$this->prefix}_locn.id
+                GROUP BY {$this->prefix}_indiv.id LIMIT {$limit}";
+        logFile($sql);
+        $res = $this->fetch($sql,1);
+
+        $rowsFilter = $this->fetch("SELECT FOUND_ROWS() AS total");
+        $rowsTotal = $this->fetch("SELECT COUNT({$this->prefix}_indiv.id) AS total FROM `{$this->prefix}_indiv` INNER JOIN `{$this->prefix}_person` ON
+                    {$this->prefix}_indiv.personID={$this->prefix}_person.id AND {$this->prefix}_indiv.n_status='0'
+                INNER JOIN `{$this->prefix}_locn` ON
+                    {$this->prefix}_indiv.locnID={$this->prefix}_locn.id");
+
+        if ($res){
+            foreach ($res as $key => $value) {
+                //print_r($value);exit;
+                $sql = "SELECT md5sum FROM `{$this->prefix}_img` WHERE indivID = {$res[$key]['indivCode']}  LIMIT 3";
+                //pr($sql);
+                $result = $this->fetch($sql,1);
+
+
+                $img = array();
+                if (is_array($result)){
+
+                    foreach ($result as $val) {
+                        if ($val['md5sum']) $img[] = $val['md5sum'];
+                    }
+
+                    $res[$key]['img'] = $img;
+                }
+            }
+        }
+        //pr($res);exit;
+        // $return['result'] = $res;
+        // return $return;
+
+        $dataArray['dataset'] = $rowsFilter['total'];
+        $dataArray['dataTotal'] = $rowsTotal['total'];
+        $dataArray['data'] = $res;
+
+        return $dataArray;
+    }
+
+    function dataIndivId($id){
+
+        $sql = "SELECT {$this->prefix}_indiv.id as indivCode, {$this->prefix}_locn.locality as locality, {$this->prefix}_person.name as pendata
+                FROM `{$this->prefix}_indiv` INNER JOIN `{$this->prefix}_person` ON
+                    {$this->prefix}_indiv.personID={$this->prefix}_person.id AND {$this->prefix}_indiv.n_status='0'
+                INNER JOIN `{$this->prefix}_locn` ON
+                    {$this->prefix}_indiv.locnID={$this->prefix}_locn.id
+                where {$this->prefix}_indiv.id = '{$id}'";
+        logFile($sql);
+        $res = $this->fetch($sql,1);
+
+        $rowsFilter = $this->fetch("SELECT FOUND_ROWS() AS total");
+        $rowsTotal = $this->fetch("SELECT COUNT({$this->prefix}_indiv.id) AS total FROM `{$this->prefix}_indiv` INNER JOIN `{$this->prefix}_person` ON
+                    {$this->prefix}_indiv.personID={$this->prefix}_person.id AND {$this->prefix}_indiv.n_status='0'
+                INNER JOIN `{$this->prefix}_locn` ON
+                    {$this->prefix}_indiv.locnID={$this->prefix}_locn.id 
+                where {$this->prefix}_indiv.id = '{$id}'");
+
+
+        if ($res){
+            foreach ($res as $key => $value) {
+                //print_r($value);exit;
+                $sql = "SELECT md5sum FROM `{$this->prefix}_img` WHERE indivID = {$res[$key]['indivCode']}  LIMIT 3";
+                //pr($sql);
+                $result = $this->fetch($sql,1);
+
+
+                $img = array();
+                if (is_array($result)){
+
+                    foreach ($result as $val) {
+                        if ($val['md5sum']) $img[] = $val['md5sum'];
+                    }
+
+                    $res[$key]['img'] = $img;
+                }
+            }
+        }
+        //pr($res);exit;
+        // $return['result'] = $res;
+        // return $return;
+
+        $dataArray['dataset'] = $rowsFilter['total'];
+        $dataArray['dataTotal'] = $rowsTotal['total'];
+        $dataArray['data'] = $res;
+
+        return $dataArray;
+    }
+    
     /**
      * @todo retrieve all data from table indiv from selected taxon
      * 
@@ -271,6 +463,38 @@ class browseHelper extends Database {
                 INNER JOIN `{$this->prefix}_locn` ON
                     {$this->prefix}_locn.id={$this->prefix}_indiv.locnID
                 GROUP BY {$this->prefix}_det.indivID LIMIT {$start}, {$limit}";
+        
+        $res = $this->fetch($sql,1);
+        $return['result'] = $res;
+        return $return;
+    }
+
+    function dataIndivTaxonAll($limit){
+        /*$sql = "SELECT * 
+                FROM `{$this->prefix}_det` INNER JOIN `{$this->prefix}_indiv` ON 
+                     {$this->prefix}_det.indivID={$this->prefix}_indiv.id AND {$this->prefix}_indiv.n_status='0'
+                INNER JOIN `{$this->prefix}_person` ON
+                    {$this->prefix}_indiv.personID={$this->prefix}_person.id
+                INNER JOIN `{$this->prefix}_locn` ON
+                    {$this->prefix}_locn.id={$this->prefix}_indiv.locnID
+                GROUP BY {$this->prefix}_det.indivID LIMIT {$limit}";*/
+        $sql = "SELECT count(DISTINCT taxonID) as dataTotal
+                FROM `{$this->prefix}_det` LIMIT {$limit}";
+        
+        $res = $this->fetch($sql,1);
+        $return['result'] = $res;
+        return $return;
+    }
+
+    function dataIndivTaxonId($id){
+        $sql = "SELECT * 
+                FROM `{$this->prefix}_det` INNER JOIN `{$this->prefix}_indiv` ON 
+                    {$this->prefix}_det.taxonID='$value' AND {$this->prefix}_det.indivID={$this->prefix}_indiv.id AND {$this->prefix}_indiv.n_status='0'
+                INNER JOIN `{$this->prefix}_person` ON
+                    {$this->prefix}_indiv.personID={$this->prefix}_person.id
+                INNER JOIN `{$this->prefix}_locn` ON
+                    {$this->prefix}_locn.id={$this->prefix}_indiv.locnID
+                WHERE {$this->prefix}_det.indivID = '{$id}'";
         
         $res = $this->fetch($sql,1);
         $return['result'] = $res;
