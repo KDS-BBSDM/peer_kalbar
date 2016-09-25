@@ -81,6 +81,7 @@ class taxon extends Controller {
 		$SSConfig['view'][4] = "sp";
 		$SSConfig['view'][5] = "image|img|sp|id";
 		$SSConfig['view'][6] = array("detail"=>"detail|{$portaldomain}browse/indiv/|id=id&action=indivTaxon");
+		$SSConfig['view'][7] = 'checkbox|Taxon|id';
 		
 		return $SSConfig;
     }

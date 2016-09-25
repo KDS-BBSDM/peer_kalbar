@@ -373,7 +373,7 @@ class ServerSide extends Database {
 					$disabled = "";
 					if ($data['checked']) $checked = "checked = checked";
 					// if ($data['disabled']) $disabled = "disabled = disabled";
-					return "<input type=\"checkbox\" id=\"checkbox\" class=\"icheck-input checkbox\" onchange=\"return AreAnyCheckboxesChecked();\" name=\"{$data['name']}[]\" value=\"{$data['value']}\" {$checked} >";
+					return "<input type=\"checkbox\" id=\"checkbox\" class=\"icheck-input checkbox\" onchange=\"return AreAnyCheckboxesChecked({$data['value']});\" name=\"{$data['name']}[]\" value=\"{$data['value']}\" {$checked} >";
 					break;
 				
 				

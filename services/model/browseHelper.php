@@ -580,7 +580,7 @@ class browseHelper extends Database {
      * @param $data = id indiv
      */
     function dataDetIndiv($data, $start=0, $limit=20){
-        $sql = "SELECT {$this->prefix}_det.id as detID, det.*, taxon.*,person.* 
+        $sql = "SELECT {$this->prefix}_det.id as detID, {$this->prefix}_taxon.*,{$this->prefix}_person.* 
                 FROM `{$this->prefix}_det` INNER JOIN `{$this->prefix}_taxon` ON 
                     indivID='$data' AND {$this->prefix}_taxon.id={$this->prefix}_det.taxonID AND {$this->prefix}_det.n_status='0'
                 INNER JOIN `{$this->prefix}_person` ON
